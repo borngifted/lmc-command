@@ -42,23 +42,20 @@ Tabs: Tasks & projects (grouped by project; filter by owner/project/category/
 status; "My tasks"; tick to complete; status dropdown; add task), Idea inbox
 (one field, ⌘/Ctrl+Enter; triage into a project; export CSV), Import / export
 (drop lmc_projects_tasks.csv or lmc_ideas_followups.csv; signed in they are
-committed to the repo for everyone; "Recent changes" log), Guide, Account.
+committed to the repo for everyone; "Recent changes" log), Guide, Account (username + password sign-in).
 Signed out, changes stay on that device; signing in syncs them. Data lives in
 the GitHub repo borngifted/lmc-command as data/seed/*.csv and data/board.json.
 Every signed-in change is a commit under the person's name — additive, reversible.
 
-Sign-in steps (GitHub token)
-1. Have a GitHub account (github.com/signup, free).
-2. Give the owner your GitHub username; they add you as a collaborator on
-   borngifted/lmc-command (Board → Account → Owner tools → Invite). Accept the
-   invitation email from GitHub.
-3. github.com/settings/personal-access-tokens/new → name "LMC COMMAND",
-   expiration 1 year, Repository access: Only select repositories → lmc-command,
-   Permissions → Repository permissions → Contents: Read and write → Generate →
-   copy.
-4. Board → Account → paste → Sign in.
-5. Account → "Who are you on the board?" → choose yourself.
-The token stays in that browser only. Repeat on each device.
+Sign-in steps
+1. Board → Account tab.
+2. Enter the username and password Work Official sent you. No GitHub account is
+   needed. Tick "Keep me signed in" on your own devices.
+3. Account → "Who are you on the board?" → choose yourself.
+4. Change your temporary password in the Account tab. Forgot it? Work Official
+   resets it from the owner panel.
+Owner only: the first-time setup (Account → Set up site sign-in) needs one
+GitHub token; after that, accounts are created from "Team accounts".
 
 Jen's first job — the seed files
 Open docs/EXTRACTION_PROMPTS.md. In the shared ChatGPT thread that holds Leo's

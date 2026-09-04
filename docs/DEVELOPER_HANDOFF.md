@@ -122,8 +122,9 @@ source or any public page.
 - **Cadence:** on-the-fly, text-based, fast turnaround. No 24-hour waits.
 - **Shared build thread:** you're starting a shared chat we build from; we'll work
   against the seed files it produces.
-- **Your login:** the board (`command.html`) is live. Sign in with your own GitHub
-  account; Work Official (`borngifted`) is owner/admin and grants access. Steps in
+- **Your login:** the board (`command.html`) is live. Sign in on the site with the
+  username + password Work Official sends you (no GitHub account needed). Work
+  Official is owner/admin and creates, resets and removes accounts. Steps in
   `JEN_ONBOARDING.md`; the board's **Guide** tab (Gemini) walks you through it.
 
 ## 8. Open items / what we still need from you
@@ -133,7 +134,6 @@ source or any public page.
 - [ ] The seven extraction files (`EXTRACTION_PROMPTS.md`)
 - [ ] Cheqroom export (current gear catalog) when ready
 - [ ] Kemp's subscription pull
-- [ ] Jen's GitHub username (so we can add her as a collaborator)
 
 ## 9. First milestone
 

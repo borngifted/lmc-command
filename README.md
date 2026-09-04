@@ -18,6 +18,7 @@ with input** — it renders `data/knowledge.json` client-side, so adding an entr
 | `index.html` | The live hub — Vision, What it runs, Creative pipeline, The stack, Pricing, Knowledge feed |
 | `command.html` | **The board** — Task & Project Command + Idea Inbox. GitHub sign-in, repo-backed sync, Gemini guide |
 | `data/seed/*.csv` | Seed files in the extraction-prompt schema (`lmc_projects_tasks.csv`, `lmc_ideas_followups.csv`) |
+| `data/users.json` | Site accounts (password-encrypted board token per user). Created by the owner from the board |
 | `data/board.json` | Shared board state — status changes, captures, added tasks, change log. Written by the board via the GitHub API |
 | `docs/JEN_ONBOARDING.md` | Jen's access + first-job walkthrough |
 | `docs/GEMINI_GUIDE_GEM.md` | Gem instructions: Gemini as the onboarding guide |
@@ -48,10 +49,14 @@ compounds day to day.
 
 ## Access
 
-Work Official (`borngifted`) owns the repo and is the system admin. Team members
-are repo collaborators (write) and sign in on the board with a fine-grained
-GitHub token scoped to this repo, stored only in their browser. Every board
-change is a commit under their name. Revoke by removing the collaborator.
+Team members sign in on the board with a **username + password** — no GitHub
+account. Accounts live in `data/users.json`: each entry is the board's
+repo-scoped GitHub token encrypted (AES-GCM) under a PBKDF2 key derived from that
+person's password, so the file is useless without the password. Work Official
+(`borngifted`) owns the repo and is the system admin: one-time setup pastes the
+token and sets the owner password; after that the owner panel creates, resets and
+removes accounts and can rotate the token to cut everyone off at once. Every
+board change is a commit under the person's username.
 
 ## The stack
 

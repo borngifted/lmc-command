@@ -10,28 +10,17 @@ device and everything you do is shared with the team and kept in the repo histor
 
 ---
 
-## 1. Get access (5 minutes, once)
+## 1. Sign in (1 minute)
 
-1. **GitHub account.** If you don't have one: https://github.com/signup (free).
-2. **Send Work Official your GitHub username.** We add you as a collaborator on
-   `borngifted/lmc-command` (write access to this one repo, nothing else). You'll
-   get an invitation email from GitHub — accept it.
-3. **Make your sign-in token.** Go to
-   https://github.com/settings/personal-access-tokens/new and set:
-   - Token name: **LMC COMMAND**
-   - Expiration: **1 year**
-   - Repository access: **Only select repositories → lmc-command**
-   - Permissions → Repository permissions → **Contents: Read and write**
-   - Generate token → **copy it** (you only see it once).
-4. **Sign in on the board.** Open the board → **Account** tab → paste the token →
-   Sign in. You'll see your name and a *Team · can edit* badge.
-5. **Say who you are.** Same tab → *Who are you on the board?* → **Jen**. That
-   powers "My tasks" and sets you as the default owner on captures.
+1. Open the board → **Account** tab.
+2. Enter the **username and password** Work Official sent you. No GitHub account,
+   no app to install. Tick *Keep me signed in* on your own devices.
+3. Under *Who are you on the board?* pick **Jen**. That powers "My tasks" and sets
+   you as the default owner on captures.
+4. Change your temporary password in the same tab.
 
-The token lives only in that browser. Repeat steps 3–5 on your phone.
-Lost or leaked token? Delete it at https://github.com/settings/personal-access-tokens
-and make a new one. Work Official can revoke your access at any time from
-Account → Owner tools.
+Forgot it? Work Official resets it from the owner panel in seconds. Sign out on a
+device you don't own.
 
 ## 2. The board in one minute
 
@@ -41,7 +30,7 @@ Account → Owner tools.
 | **Idea inbox** | The 1 a.m. brain. One field, ⌘/Ctrl+Enter, done. Later: triage each capture into a project, or mark it done. Export as `lmc_ideas_followups.csv` any time. |
 | **Import / export** | Drop the extraction files here. Signed in, they're committed to `data/seed/` for everyone. The *Recent changes* log shows who did what. |
 | **Guide** | Gemini, pre-loaded with this doc, the handoff, and the live board state. |
-| **Account** | Sign in / out, who you are, owner tools. |
+| **Account** | Sign in / out, who you are, change password. Owner: team accounts. |
 
 Signed out, the board still works — changes stay on that device and sync the
 moment you sign in.
@@ -91,3 +80,10 @@ Leo's project docs ──ChatGPT thread──▶ seed CSV/MD files ──Import�
 ```
 
 Owned, not rented: the data is CSV and JSON in a repo LMC can take anywhere.
+
+**How sign-in works under the hood (for the developer in you):** accounts live in
+`data/users.json`. Each entry holds the board's write token encrypted (AES-GCM)
+under a key derived from that person's password (PBKDF2, 600k rounds). Signing in
+derives the key in your browser and unlocks the token; a wrong password simply
+fails to decrypt. Nothing in the file is usable without the password, so pick a
+real one — 10+ characters. The owner can rotate the token to cut everyone off at once.
