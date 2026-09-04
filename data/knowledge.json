@@ -1,0 +1,13 @@
+{
+  "updated": "2026-09-04",
+  "note": "The living knowledge feed. Add an entry here and it appears on the site — this is how LMC COMMAND grows with input.",
+  "entries": [
+    {"date":"2026-09-04","tag":"hardware","title":"AMD Ryzen AI Max+ 395 (128GB) chosen as the render node","body":"128GB unified memory holds large video + language models at once. 'Killed the $200/month AI bill' — the everyday model cost moves on-device."},
+    {"date":"2026-09-04","tag":"video","title":"LTX 2.3 is the anchor local video model","body":"Apache 2.0, runs on NVIDIA / Apple Silicon / AMD Radeon at 24fps. Open license means no per-render metering on the Ryzen node."},
+    {"date":"2026-09-04","tag":"video","title":"SkyReels for cloud-burst hero shots","body":"Omni-reference, unlimited length. Kept for frontier-quality bursts, not the everyday default."},
+    {"date":"2026-09-04","tag":"3d","title":"Blender + TRIPOINT for the 3D stage","body":"Free triangulation tool feeding layout, camera and blocking before AI video coverage."},
+    {"date":"2026-09-04","tag":"mocap","title":"Markerless motion capture from plain video","body":"Performance capture without a suit or stage — mocap that used to cost hundreds of thousands, now accessible."},
+    {"date":"2026-09-04","tag":"orchestration","title":"Claude Code + MCP is the autonomy layer","body":"Agentic monitoring and orchestration — this is LMC COMMAND itself: agents that run and watch the studio."},
+    {"date":"2026-09-04","tag":"llm","title":"Local LLM for the writing & agent layer","body":"A free, powerful open model in the 128GB pool handles briefs, prompts and agents with zero cloud tokens."}
+  ]
+}

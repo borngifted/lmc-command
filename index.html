@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMC COMMAND</title>
+<meta name="description" content="Leo Marshall Creative Autonomous Command System — a living operations & creative intelligence hub that grows with input and knowledge.">
+<meta name="theme-color" content="#0b1220">
+<style>
+:root{
+  --bg:#0b1220; --panel:#111c30; --panel2:#16243c; --line:#24344f;
+  --ink:#eaf1fb; --muted:#93a6c4; --accent:#4c8dff; --accent2:#37e0b0; --warn:#ffcf5c;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media(prefers-color-scheme:light){:root:not([data-t]){--bg:#f4f7fc;--panel:#fff;--panel2:#eef3fb;--line:#d8e2f0;--ink:#0b1220;--muted:#51617d}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),transparent)}
+header .wrap{padding:22px 22px 28px}
+.brandline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 14px var(--accent2);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.dot{animation:none}}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.04;margin:14px 0 6px}
+.sub{font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:62ch}
+.sub b{color:var(--ink)}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:22px}
+nav.tabs button{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-family:var(--f);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .15s}
+nav.tabs button:hover{color:var(--ink);border-color:var(--accent)}
+nav.tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+main{padding:34px 0 90px}
+.panel{display:none}
+.panel.on{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.lede{color:var(--muted);max-width:64ch;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.cell{background:var(--panel);padding:20px}
+.cell h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.cell p{font-size:14px;color:var(--muted)}
+.cell .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
+/* pipeline */
+.flow{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:24px}
+.step{background:var(--panel);padding:16px 20px;display:grid;grid-template-columns:34px 1fr auto;gap:16px;align-items:center;border-left:3px solid var(--accent)}
+.step:nth-child(even){background:var(--panel2)}
+.step .n{font-family:var(--mono);color:var(--accent);font-weight:700}
+.step b{font-size:15px}
+.step span{display:block;font-size:13px;color:var(--muted)}
+.step .where{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);white-space:nowrap}
+@media(max-width:640px){.step{grid-template-columns:28px 1fr}.step .where{display:none}}
+/* machines */
+.machines{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
+.mach{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:22px}
+.mach.hero{border-color:var(--accent2)}
+.mach h3{font-size:18px;font-weight:800}
+.mach .spec{font-family:var(--mono);font-size:12px;color:var(--accent2);margin:4px 0 12px}
+.mach ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.mach li{font-size:14px;color:var(--muted);padding-left:16px;position:relative}
+.mach li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+@media(max-width:640px){.machines{grid-template-columns:1fr}}
+/* pricing */
+.ptable{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px}
+.ptable th,.ptable td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.ptable th{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--panel2)}
+.ptable td.price{text-align:right;font-family:var(--mono);color:var(--accent2);font-weight:700;white-space:nowrap}
+.ptable tr.rec td{background:rgba(76,141,255,.08)}
+.tag-rec{font-family:var(--mono);font-size:9px;letter-spacing:.1em;background:var(--accent);color:#fff;padding:2px 7px;border-radius:999px;margin-left:8px}
+.save{background:var(--panel);border:1px solid var(--accent2);border-radius:8px;padding:20px;margin-top:8px}
+.save b{color:var(--accent2)}
+/* knowledge feed */
+.feed{display:flex;flex-direction:column;gap:12px}
+.item{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:6px;padding:16px 18px}
+.item .meta{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.item .ftag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.item .fdate{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.item h3{font-size:15.5px;font-weight:700;margin-bottom:4px}
+.item p{font-size:14px;color:var(--muted)}
+.addbox{background:var(--panel2);border:1px dashed var(--line);border-radius:8px;padding:18px;margin-bottom:20px;font-size:13.5px;color:var(--muted)}
+.addbox code{font-family:var(--mono);color:var(--accent2);font-size:12.5px}
+footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font-size:13px}
+.src{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:20px}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="brandline">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="eyebrow">LMC COMMAND · live</span>
+  </div>
+  <h1>Leo Marshall Creative<br>Autonomous Command System</h1>
+  <p class="sub">A digital operations staff that never forgets — it watches the studio,
+    knows what needs attention, and runs the creative pipeline <b>on hardware you own</b>.
+    This hub is <b>live and grows with every input</b>.</p>
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-p="vision">Vision</button>
+    <button role="tab" aria-selected="false" data-p="pipeline">Creative pipeline</button>
+    <button role="tab" aria-selected="false" data-p="stack">The stack</button>
+    <button role="tab" aria-selected="false" data-p="pricing">Pricing</button>
+    <button role="tab" aria-selected="false" data-p="feed">Knowledge feed</button>
+  </nav>
+</div></header>
+
+<main><div class="wrap">
+
+  <section class="panel on" id="vision" role="tabpanel">
+    <h2>Own the engine. Stop renting it.</h2>
+    <p class="lede">Studios rent AI — video, language, design — for $200 to $800 a month,
+      forever, metered on top. LMC COMMAND moves the everyday model cost <b>on-device</b>,
+      once, then keeps it running and current. Cloud stays for the occasional hero shot,
+      not the daily default.</p>
+    <div class="grid">
+      <div class="cell"><div class="k">Never forgets</div><h3>Persistent memory</h3><p>Projects, decisions, vendors, equipment, deadlines — one system that remembers so the team doesn't have to.</p></div>
+      <div class="cell"><div class="k">Always watching</div><h3>Autonomous agents</h3><p>Executive Monitor, Project Watcher, Follow-Up, Subscription & Equipment watchers — permissioned, approval-gated, logged.</p></div>
+      <div class="cell"><div class="k">Owns the tools</div><h3>Local-first creative</h3><p>Video, LLM and 3D run on the studio's own machine — marginal cost zero per render.</p></div>
+      <div class="cell"><div class="k">Grows</div><h3>Living knowledge</h3><p>Every input — a decision, a new tool, a lesson — is captured and surfaced. The system compounds.</p></div>
+    </div>
+  </section>
+
+  <section class="panel" id="pipeline" role="tabpanel">
+    <h2>The creative pipeline</h2>
+    <p class="lede">Built from the reference set Leo shared — local, open-source AI across
+      video, language, 3D and motion capture. One idea flows to a finished piece.</p>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><div><b>Brief & prompts</b><span>Local LLM drafts briefs, scripts, prompts — zero cloud tokens</span></div><span class="where">on-device LLM</span></div>
+      <div class="step"><span class="n">2</span><div><b>Concept & reference</b><span>Style, character and board frames in ComfyUI</span></div><span class="where">ComfyUI · local</span></div>
+      <div class="step"><span class="n">3</span><div><b>3D layout</b><span>Scene, camera, blocking — Blender + TRIPOINT</span></div><span class="where">Blender</span></div>
+      <div class="step"><span class="n">4</span><div><b>Motion capture</b><span>Markerless performance from plain video — no suit, no stage</span></div><span class="where">AI mocap</span></div>
+      <div class="step"><span class="n">5</span><div><b>AI video</b><span>Cinematic coverage — LTX 2.3 local, SkyReels for cloud-burst hero shots</span></div><span class="where">LTX 2.3 · Radeon</span></div>
+      <div class="step"><span class="n">6</span><div><b>Edit & finish</b><span>Assembly, color, sound</span></div><span class="where">DaVinci</span></div>
+      <div class="step"><span class="n">7</span><div><b>Orchestrate & publish</b><span>Claude Code + MCP agents run and watch it all</span></div><span class="where">LMC COMMAND</span></div>
+    </div>
+    <p class="src">Sources: 9 reference videos (Sept 2026) — AI mocap · GLM/Design Arena · TRIPOINT · SkyReels · LTX 2.3 · Claude Code + MCP · AMD Ryzen AI Max · NVIDIA/Nous on-device agents · local LLM.</p>
+  </section>
+
+  <section class="panel" id="stack" role="tabpanel">
+    <h2>The two-machine studio</h2>
+    <p class="lede">One machine to make, one to run everything. The render node is the
+      part that changes the economics.</p>
+    <div class="machines">
+      <div class="mach hero">
+        <h3>The render node</h3>
+        <div class="spec">AMD Ryzen AI Max+ 395 · 128GB unified</div>
+        <ul>
+          <li>128GB holds large video + language models at once</li>
+          <li>LTX 2.3 video on the Radeon iGPU (Apache 2.0)</li>
+          <li>Local LLM in the unified pool — no cloud tokens</li>
+          <li>ComfyUI · Blender + TRIPOINT · markerless mocap</li>
+          <li>"Killed the $200/month AI bill" — the everyday cost moves here, once</li>
+        </ul>
+      </div>
+      <div class="mach">
+        <h3>The studio</h3>
+        <div class="spec">Mac / workstation</div>
+        <ul>
+          <li>Editing, color, sound, delivery</li>
+          <li>LMC COMMAND hub + agent orchestration</li>
+          <li>Client work and review</li>
+          <li>Drives the render node over the LAN</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src">Cloud tools (SkyReels, frontier models) stay in the kit for burst — billed at cost, not as the daily default.</p>
+  </section>
+
+  <section class="panel" id="pricing" role="tabpanel">
+    <h2>Pricing — setup and management, kept separate</h2>
+    <p class="lede">One-time build, plus a flat monthly to run, watch and grow it.</p>
+    <table class="ptable">
+      <thead><tr><th>Setup (one-time)</th><th>What's built</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td><b>Foundation</b></td><td>LMC COMMAND hub, system audit, core entities, knowledge feed, 1 machine provisioned</td><td class="price">$3,500</td></tr>
+        <tr class="rec"><td><b>Studio</b><span class="tag-rec">rec</span></td><td>+ full local creative stack on the Ryzen AI Max 128GB, pipeline wired end-to-end, 3 agents</td><td class="price">$7,500</td></tr>
+        <tr><td><b>Command</b></td><td>+ autonomous ops layer, MCP orchestration, approval-gated automation, team onboarding</td><td class="price">$14,000</td></tr>
+      </tbody>
+    </table>
+    <table class="ptable">
+      <thead><tr><th>Monthly management</th><th>Included</th><th>Per month</th></tr></thead>
+      <tbody>
+        <tr><td><b>Maintain</b></td><td>Uptime, model updates, weekly brief, backups, support</td><td class="price">$600</td></tr>
+        <tr class="rec"><td><b>Operate</b><span class="tag-rec">rec</span></td><td>+ agents run & monitored, watchers live, 2 production runs/mo, priority support</td><td class="price">$1,500</td></tr>
+        <tr><td><b>Autonomous</b></td><td>+ full autonomous ops, unlimited runs, proactive detection, strategy review</td><td class="price">$3,200</td></tr>
+      </tbody>
+    </table>
+    <div class="save">
+      <p><b>Year one, Studio + Operate:</b> $7,500 setup + $18,000 management = <b>$25,500</b>
+      — replacing ~$500/mo of rented AI <b>plus</b> the labor of running it. Every local
+      production run after that is marginal-cost-zero.</p>
+    </div>
+    <p class="src">Starting framework for discussion, not a signed quote. Hardware billed at cost. 50% of setup to start; management billed monthly, 30-day cancellation.</p>
+  </section>
+
+  <section class="panel" id="feed" role="tabpanel">
+    <h2>Knowledge feed — the system grows here</h2>
+    <p class="lede">Every decision, tool, and lesson is captured and surfaced. This is what
+      "a system that never forgets" looks like day to day.</p>
+    <div class="addbox">
+      <b style="color:var(--ink)">How it grows:</b> add an entry to <code>data/knowledge.json</code>
+      and it appears here on next load. An agent (or a person) can append — the hub compounds
+      with every input, no rebuild.
+    </div>
+    <div class="feed" id="feed" aria-live="polite"><p class="lede">Loading feed…</p></div>
+  </section>
+
+</div></main>
+
+<footer><div class="wrap">
+  <b style="color:var(--ink)">LMC COMMAND</b> — Leo Marshall Creative Autonomous Command System ·
+  built by Work Official LLC · additive, reversible, secrets-safe by design.
+</div></footer>
+
+<script>
+/* tabs */
+var tabs=document.querySelectorAll('nav.tabs button'), panels=document.querySelectorAll('.panel');
+tabs.forEach(function(t){t.addEventListener('click',function(){
+  tabs.forEach(function(x){x.setAttribute('aria-selected','false')});
+  t.setAttribute('aria-selected','true');
+  panels.forEach(function(p){p.classList.toggle('on',p.id===t.dataset.p)});
+});});
+
+/* living knowledge feed */
+fetch('data/knowledge.json?t='+Date.now()).then(function(r){return r.json();}).then(function(d){
+  var el=document.getElementById('feed');
+  el.innerHTML='';
+  d.entries.slice().reverse().forEach(function(e){
+    var it=document.createElement('div'); it.className='item';
+    it.innerHTML='<div class="meta"><span class="ftag">'+e.tag+'</span><span class="fdate">'+e.date+'</span></div>'
+      +'<h3>'+e.title+'</h3><p>'+e.body+'</p>';
+    el.appendChild(it);
+  });
+}).catch(function(){document.getElementById('feed').innerHTML='<p class="lede">Feed unavailable offline.</p>';});
+</script>
+</body>
+</html>
