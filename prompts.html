@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMC COMMAND · Extraction Prompts for Jen</title>
+<meta name="description" content="The eight prompts that turn Leo's project files into LMC COMMAND seed data. Copy, paste into the shared ChatGPT thread, save the outputs, hand them back.">
+<meta name="theme-color" content="#0b1220">
+<style>
+:root{--bg:#0b1220;--panel:#111c30;--panel2:#16243c;--line:#24344f;--ink:#eaf1fb;--muted:#93a6c4;--accent:#4c8dff;--accent2:#37e0b0;--warn:#ffcf5c;
+--f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+@media(prefers-color-scheme:light){:root{--bg:#f4f7fc;--panel:#fff;--panel2:#eef3fb;--line:#d8e2f0;--ink:#0b1220;--muted:#51617d}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px}
+a{color:var(--accent)}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),transparent)}
+header .wrap{padding:26px 22px 28px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:12px 0 10px}
+.sub{color:var(--muted);max-width:64ch} .sub b{color:var(--ink)}
+main{padding:30px 0 80px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-bottom:18px}
+.card.hi{border-color:var(--accent2)}
+.card h3{font-size:15px;font-weight:800;margin-bottom:8px}
+.card ol,.card ul{padding-left:22px;color:var(--muted);font-size:14.5px;display:flex;flex-direction:column;gap:6px}
+.card li b{color:var(--ink)}
+code{font-family:var(--mono);color:var(--accent2);font-size:13px}
+.files{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px}
+.files li{display:flex;gap:10px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:8px 12px}
+.files input{width:16px;height:16px}
+.progress{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px}
+.p{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-bottom:16px;overflow:hidden}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 20px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.ph .n{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid var(--accent);padding:1px 8px;border-radius:999px;margin-right:10px;vertical-align:middle}
+.ph h2{display:inline;font-size:18px;font-weight:800;letter-spacing:-.01em;vertical-align:middle}
+.fn{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:6px}
+pre{font-family:var(--mono);font-size:13px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;padding:18px 20px;color:var(--ink);background:var(--panel);max-height:420px;overflow:auto}
+.copy{background:var(--accent2);color:#04231a;border:0;font-family:var(--f);font-weight:700;font-size:13px;padding:9px 16px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.copy:hover{filter:brightness(1.08)} .copy.ok{background:var(--accent);color:#fff}
+.done{display:flex;gap:8px;align-items:center;padding:10px 20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);cursor:pointer}
+.p.is-done{opacity:.6} .p.is-done .ph h2{text-decoration:line-through}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 24px}
+.toc a{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;text-decoration:none;color:var(--muted)}
+.toc a:hover{border-color:var(--accent);color:var(--ink)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:var(--f);font-size:13px;font-weight:600;padding:8px 14px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--accent2);color:#04231a;font-weight:700;font-size:13px;padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+footer{border-top:1px solid var(--line);padding:24px 0 50px;color:var(--muted);font-size:13px}
+@media print{.copy,.done,.toc,.btnrow,.toast{display:none}pre{max-height:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">LMC COMMAND · handoff · for Jen</div>
+  <h1>Extraction prompts</h1>
+  <p class="sub">Eight prompts that turn everything in the shared ChatGPT thread — Leo's project files,
+    reviews, notes — into the seed data for LMC COMMAND. <b>Copy each one, paste it into the thread,
+    save the output under the filename shown, and hand the files back.</b> That's the whole job.</p>
+</div></header>
+
+<main><div class="wrap">
+
+  <div class="card hi">
+    <h3>How to run them</h3>
+    <ol>
+      <li>Open the <b>shared ChatGPT thread</b> that already holds Leo's project files (construction, cabinetry review, lighting review, TV show, studio…).</li>
+      <li>Press <b>Copy prompt</b> on block <b>0</b>, paste it in, send. Wait for ChatGPT to confirm.</li>
+      <li>Do the same for <b>1 through 7, in order, one at a time</b>. Let each finish before the next. If ChatGPT asks a clarifying question, answer it — completeness beats speed.</li>
+      <li>Save each answer as a file with the <b>exact filename</b> shown on the block (CSV blocks → <code>.csv</code>, narrative → <code>.md</code>). In ChatGPT, use the copy icon on the code block, paste into a blank TextEdit/Notes file, and save with that name.</li>
+      <li><b>Hand back:</b> drop <code>lmc_projects_tasks.csv</code> and <code>lmc_ideas_followups.csv</code> straight into the board (<a href="https://borngifted.github.io/lmc-command/command.html#ingest">Import / export</a>, signed in) — they load as-is. Send all seven files to Work Official by text or email.</li>
+    </ol>
+    <div class="btnrow"><a class="btn primary" href="https://borngifted.github.io/lmc-command/command.html#account">Open the board</a><a class="btn" href="https://borngifted.github.io/lmc-command/command.html#guide">Ask the Gemini guide</a><button class="btn" id="copyAll">Copy all eight prompts as one document</button></div>
+  </div>
+
+  <div class="card">
+    <h3>The files you're producing</h3>
+    <ul class="files"><li><input type="checkbox" data-k="f1" id="f1"><label for="f1"><code>lmc_projects_tasks.csv</code></label></li><li><input type="checkbox" data-k="f2" id="f2"><label for="f2"><code>lmc_ideas_followups.csv</code></label></li><li><input type="checkbox" data-k="f3" id="f3"><label for="f3"><code>lmc_gear_notes.md</code></label></li><li><input type="checkbox" data-k="f4" id="f4"><label for="f4"><code>lmc_subscriptions.csv</code></label></li><li><input type="checkbox" data-k="f5" id="f5"><label for="f5"><code>lmc_contacts.csv</code></label></li><li><input type="checkbox" data-k="f6" id="f6"><label for="f6"><code>lmc_studio.md</code></label></li><li><input type="checkbox" data-k="f7" id="f7"><label for="f7"><code>lmc_ecosystem_summary.md</code></label></li></ul>
+    <div class="progress" id="prog"></div>
+  </div>
+
+  <div class="toc"><a href="#p0">0 · Set the frame (run this first)</a><a href="#p1">1 · Master project + task list</a><a href="#p2">2 · Leo&#x27;s ideas, follow-ups &amp; open loops</a><a href="#p3">3 · Gear &amp; inventory reality</a><a href="#p4">4 · Subscriptions to consolidate</a><a href="#p5">5 · People, vendors &amp; contacts</a><a href="#p6">6 · Studio &amp; spaces</a><a href="#p7">7 · One-page ecosystem summary</a></div>
+
+  
+  <section class="p" id="p0">
+    <div class="ph">
+      <div><span class="n">0</span><h2>Set the frame (run this first)</h2><div class="fn">run this first — no file</div></div>
+      <button class="copy" data-t="t0">Copy prompt</button>
+    </div>
+    <pre id="t0">You are helping me produce a developer handoff for an in-house operations and
+project &quot;command center&quot; we&#x27;re building for Leo Marshall Creative (LMC). I am
+Jen — I run operations and I&#x27;m acting as a developer on this build. Everything I
+ask for from here should be delivered in HANDOFF FORMAT so a developer can load
+it directly into a system:
+- Narrative / instructions → Markdown (.md)
+- Anything list-like (projects, tasks, gear, contacts, subscriptions) → CSV,
+  with a header row and one record per line.
+Be exhaustive and literal. Pull from every file and message in this thread.
+Where a field is unknown, write &quot;UNKNOWN&quot; rather than guessing. Do not summarize
+away detail — this is source data, not a recap. Confirm you understand, then wait
+for my first extraction request.</pre>
+    <label class="done"><input type="checkbox" data-k="p0"> Done</label>
+  </section>
+  <section class="p" id="p1">
+    <div class="ph">
+      <div><span class="n">1</span><h2>Master project + task list</h2><div class="fn">save as <code>lmc_projects_tasks.csv</code></div></div>
+      <button class="copy" data-t="t1">Copy prompt</button>
+    </div>
+    <pre id="t1">From everything in this thread, produce a CSV named lmc_projects_tasks.csv of
+every project and every task you can find. One row per task. Columns:
+
+project, task, category, status, owner, due_or_timeframe, priority, blocked_by,
+next_action, notes, source_file
+
+- category examples: construction, studio buildout, cabinetry, lighting, gear,
+  TV show, client work, admin, vendor/manufacturing, marketing, other
+- status: not_started / in_progress / blocked / waiting / done / UNKNOWN
+- owner: Leo / Jen / Kemp / vendor / UNKNOWN
+- priority: high / medium / low / UNKNOWN
+Include finished items too, marked done. Be exhaustive — every construction line
+item, every review, every follow-up. Output only the CSV.</pre>
+    <label class="done"><input type="checkbox" data-k="p1"> Done — lmc_projects_tasks.csv saved</label>
+  </section>
+  <section class="p" id="p2">
+    <div class="ph">
+      <div><span class="n">2</span><h2>Leo&#x27;s ideas, follow-ups &amp; open loops</h2><div class="fn">save as <code>lmc_ideas_followups.csv</code></div></div>
+      <button class="copy" data-t="t2">Copy prompt</button>
+    </div>
+    <pre id="t2">Leo generates ideas and follow-ups at all hours (including late-night calls with
+overseas vendors). From this thread, extract every IDEA, FOLLOW-UP, or unresolved
+&quot;we should…&quot; / &quot;need to…&quot; / &quot;waiting on…&quot; into a CSV named
+lmc_ideas_followups.csv. One row each. Columns:
+
+item, type, related_project, who_owns_it, needs_response_from, time_sensitivity,
+status, notes, source_file
+
+- type: idea / follow_up / decision_needed / waiting_on / reminder
+Capture even half-formed one-off thoughts. This is the &quot;get it out of Leo&#x27;s head&quot;
+inventory. Output only the CSV.</pre>
+    <label class="done"><input type="checkbox" data-k="p2"> Done — lmc_ideas_followups.csv saved</label>
+  </section>
+  <section class="p" id="p3">
+    <div class="ph">
+      <div><span class="n">3</span><h2>Gear &amp; inventory reality</h2><div class="fn">save as <code>lmc_gear_notes.md</code></div></div>
+      <button class="copy" data-t="t3">Copy prompt</button>
+    </div>
+    <pre id="t3">We currently track ~90% of gear in Cheqroom with SKUs and QR labels, but small
+grip items are NOT tracked (C-stands, arms, knuckles, cardellinis, etc.) because
+Cheqroom charges per SKU/QR. Those items walk away. We&#x27;re considering building our
+own inventory system to own it and drop the subscription.
+
+Produce a Markdown file lmc_gear_notes.md covering, from anything in this thread
+and your knowledge of our operation:
+- Categories of gear we own (camera, lens, lighting, grip, audio, etc.)
+- Which categories are currently tracked vs. untracked
+- The specific small/untracked items most prone to walking away, with rough unit
+  cost where known
+- How we currently print labels in-house (workflow, hardware if mentioned)
+- Kit structure: what &quot;kits&quot; exist and what pieces belong to each
+Mark unknowns as UNKNOWN. This feeds an inventory module design.</pre>
+    <label class="done"><input type="checkbox" data-k="p3"> Done — lmc_gear_notes.md saved</label>
+  </section>
+  <section class="p" id="p4">
+    <div class="ph">
+      <div><span class="n">4</span><h2>Subscriptions to consolidate</h2><div class="fn">save as <code>lmc_subscriptions.csv</code></div></div>
+      <button class="copy" data-t="t4">Copy prompt</button>
+    </div>
+    <pre id="t4">We want to cut subscription costs — especially the many professional AI tools.
+(Kemp, our editor, can fill gaps.) Produce a CSV named lmc_subscriptions.csv of
+every paid software/AI/service subscription you can identify from this thread.
+One row each. Columns:
+
+service, category, plan_tier, monthly_cost, annual_cost, who_uses_it,
+what_it_does, local_alternative_exists, keep_cut_or_review, notes
+
+- category: AI / creative / storage / gear-mgmt / productivity / other
+- keep_cut_or_review: keep / cut / review
+Where cost is unknown, write UNKNOWN. Flag any that a local/owned tool could
+replace. Output only the CSV.</pre>
+    <label class="done"><input type="checkbox" data-k="p4"> Done — lmc_subscriptions.csv saved</label>
+  </section>
+  <section class="p" id="p5">
+    <div class="ph">
+      <div><span class="n">5</span><h2>People, vendors &amp; contacts</h2><div class="fn">save as <code>lmc_contacts.csv</code></div></div>
+      <button class="copy" data-t="t5">Copy prompt</button>
+    </div>
+    <pre id="t5">Produce a CSV named lmc_contacts.csv of the people, vendors, manufacturers, and
+clients referenced in this thread. One row each. Columns:
+
+name, role_or_company, relationship, timezone_or_region, what_we_work_on_together,
+best_contact_method, notes
+
+Include overseas manufacturing/vendor reps (e.g. China calls), internal team
+(Leo, Jen, Kemp, Tarifa), and any clients or partners. UNKNOWN where needed.
+Output only the CSV.</pre>
+    <label class="done"><input type="checkbox" data-k="p5"> Done — lmc_contacts.csv saved</label>
+  </section>
+  <section class="p" id="p6">
+    <div class="ph">
+      <div><span class="n">6</span><h2>Studio &amp; spaces</h2><div class="fn">save as <code>lmc_studio.md</code></div></div>
+      <button class="copy" data-t="t6">Copy prompt</button>
+    </div>
+    <pre id="t6">Produce a Markdown file lmc_studio.md describing our physical studio from this
+thread: the front studio (the part we rent out), the backspace (private), the
+layout/grid, any remodel/construction changes since our PeerSpace listing, and
+what still needs updated photos or documentation. Note anything relevant to
+rentals, buildout status, or gear storage. Mark unknowns UNKNOWN.</pre>
+    <label class="done"><input type="checkbox" data-k="p6"> Done — lmc_studio.md saved</label>
+  </section>
+  <section class="p" id="p7">
+    <div class="ph">
+      <div><span class="n">7</span><h2>One-page ecosystem summary</h2><div class="fn">save as <code>lmc_ecosystem_summary.md</code></div></div>
+      <button class="copy" data-t="t7">Copy prompt</button>
+    </div>
+    <pre id="t7">Finally, write lmc_ecosystem_summary.md: a one-page executive summary of the
+entire LMC ecosystem right now — the active projects, the state of the studio
+buildout, the TV show, gear/inventory, vendor/manufacturing relationships, and
+the biggest operational pain points. Write it for a developer who is about to
+build a command center to run all of it. Plain, specific, no fluff.</pre>
+    <label class="done"><input type="checkbox" data-k="p7"> Done — lmc_ecosystem_summary.md saved</label>
+  </section>
+
+  <div class="card">
+    <h3>When you're done</h3>
+    <ul>
+      <li>Board → Import / export → drop the two CSVs. They replace the placeholder rows and the board fills with the real projects.</li>
+      <li>Text or email the other five files to Work Official. They seed Gear &amp; Inventory, the Subscription Ledger, Contacts, Studio &amp; Spaces.</li>
+      <li>Updated files later? Same filenames, drop them again. Nothing is lost — the board keeps its own changes.</li>
+    </ul>
+  </div>
+
+</div></main>
+<footer><div class="wrap">LMC COMMAND · Work Official LLC · <a href="https://borngifted.github.io/lmc-command/">hub</a> · <a href="https://borngifted.github.io/lmc-command/command.html">board</a> · progress ticks are saved in this browser only</div></footer>
+<div class="toast" id="toast"></div>
+<script>
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},1600);}
+function copyText(txt){
+  if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(txt);
+  return new Promise(function(res,rej){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');res();}catch(e){rej(e);}ta.remove();});
+}
+document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){
+  var pre=document.getElementById(b.dataset.t);
+  copyText(pre.textContent).then(function(){b.textContent='Copied ✓';b.classList.add('ok');toast('Prompt copied — paste it into the ChatGPT thread');setTimeout(function(){b.textContent='Copy prompt';b.classList.remove('ok');},2200);})
+  .catch(function(){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r);toast('Select-all done — press ⌘C / Ctrl+C');});
+});});
+document.getElementById('copyAll').addEventListener('click',function(){
+  var all=[].map.call(document.querySelectorAll('.p'),function(p){var h=p.querySelector('.ph').innerText.replace(/\n+/g,' — ').replace(' — Copy prompt','');return '### '+h+'\n\n'+p.querySelector('pre').textContent;}).join('\n\n---\n\n');
+  copyText('LMC COMMAND — Extraction prompts (run 0 first, then 1–7 in order, one at a time)\n\n'+all).then(function(){toast('All eight prompts copied');});
+});
+/* progress ticks (this browser only) */
+var K='lmc_prompts_progress';var st={};try{st=JSON.parse(localStorage.getItem(K)||'{}');}catch(e){}
+function paint(){
+  document.querySelectorAll('input[data-k]').forEach(function(c){c.checked=!!st[c.dataset.k];var p=c.closest('.p');if(p)p.classList.toggle('is-done',c.checked);});
+  var f=[].filter.call(document.querySelectorAll('.files input'),function(c){return c.checked;}).length,n=document.querySelectorAll('.files input').length;
+  document.getElementById('prog').textContent=f+' of '+n+' files saved'+(f===n?' — all done, hand them back':'');
+}
+document.addEventListener('change',function(e){var c=e.target;if(!c.dataset||!c.dataset.k)return;st[c.dataset.k]=c.checked;var m=c.dataset.k.match(/^p(\d)$/);if(m&&document.getElementById('f'+m[1]))st['f'+m[1]]=c.checked;try{localStorage.setItem(K,JSON.stringify(st));}catch(x){}paint();});
+paint();
+</script>
+</body>
+</html>

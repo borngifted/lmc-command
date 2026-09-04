@@ -17,6 +17,7 @@ with input** — it renders `data/knowledge.json` client-side, so adding an entr
 |------|------------|
 | `index.html` | The live hub — Vision, What it runs, Creative pipeline, The stack, Pricing, Knowledge feed |
 | `command.html` | **The board** — Task & Project Command + Idea Inbox. GitHub sign-in, repo-backed sync, Gemini guide |
+| `prompts.html` | Shareable copy-and-paste page of the extraction prompts for Jen |
 | `data/seed/*.csv` | Seed files in the extraction-prompt schema (`lmc_projects_tasks.csv`, `lmc_ideas_followups.csv`) |
 | `data/users.json` | Site accounts (password-encrypted board token per user). Created by the owner from the board |
 | `data/board.json` | Shared board state — status changes, captures, added tasks, change log. Written by the board via the GitHub API |

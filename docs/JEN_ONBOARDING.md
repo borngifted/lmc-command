@@ -37,7 +37,8 @@ moment you sign in.
 
 ## 3. Your first job — the seed files
 
-1. Open `docs/EXTRACTION_PROMPTS.md`.
+1. Open the prompts page: https://borngifted.github.io/lmc-command/prompts.html
+   (every prompt has a Copy button and a checklist of the files).
 2. In the shared ChatGPT thread that holds Leo's project files, paste **prompt 0**,
    then **1 through 7**, one at a time. Save each output under the filename the
    prompt names.
