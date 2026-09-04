@@ -32,8 +32,8 @@ lose a follow-up (or a $100 cardellini).
    ~$100 each) isn't tracked. Kits check out whole; individual pieces can't.
 4. **Subscription sprawl.** Paying professionally for "every kind of AI" and more.
    LMC is **anti-subscription** and wants to own its tools.
-5. **Hardware gap.** Current Mac is an M1 / 8GB / 2020 — not enough. Min **M4**
-   for the Mac side; heavy AI/render runs on the owned Ryzen node (see §6).
+5. **Hardware gap.** Current Mac is an M1 / 8GB / 2020 — not enough. Min **M5 Pro**
+   (was "M4" before Apple's Aug 2026 refresh) for the Mac side; heavy AI/render runs on the owned Ryzen node (see §6).
 
 ## 3. Modules (build order)
 
@@ -103,9 +103,13 @@ source or any public page.
 
 ## 6. Hardware / environment (for tomorrow's "best-practice computers" talk)
 
-- **Mac side (edit, orchestrate, run the command center):** minimum **M4**; more
-  unified memory is better. The M1/8GB won't carry this.
+- **Mac side (edit, orchestrate, run the command center):** Apple refreshed the
+  line in Aug 2026, so the minimum is now **Mac mini M5 Pro, 48GB — $2,299**
+  (M6 24GB at $1,299 is the floor for hub-only; Mac Studio M5 Max 64GB at $2,899
+  for heavy multi-cam). The M1/8GB won't carry this.
 - **AI / render node (owned, local):** **AMD Ryzen AI Max+ 395, 128GB unified** —
+  Corsair AI Workstation 300 at **$2,699** (recommended), GMKtec EVO-X2 at $2,199
+  when in stock, Framework Desktop $3,868 fully built. Exact table: `PRICING.md` Part 0 —
   runs local video (LTX 2.3 on Radeon), a local LLM, ComfyUI, Blender+TRIPOINT,
   mocap. This is what lets LMC drop the recurring AI bill. See
   `CREATIVE_PIPELINE.md`.

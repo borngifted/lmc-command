@@ -97,6 +97,12 @@
       "tag": "onboarding",
       "title": "Gemini guides Jen through setup",
       "body": "The board's Guide tab runs Gemini with the onboarding doc, handoff, extraction prompts and live board state. docs/JEN_ONBOARDING.md is the written version; docs/GEMINI_GUIDE_GEM.md makes it a standalone Gem."
+    },
+    {
+      "date": "2026-09-04",
+      "tag": "hardware",
+      "title": "Exact hardware cost, verified: $4,998 for the recommended pair",
+      "body": "Render node Corsair AI Workstation 300 (Ryzen AI Max+ 395, 128GB, 1TB) $2,699 · studio Mac mini M5 Pro 48GB $2,299. Budget pair $3,899 (GMKtec EVO-X2 $2,199 + M5 Pro 24GB $1,699); headroom $6,767 (Framework $3,868 + Mac Studio M5 Max 64GB $2,899). Apple refreshed the minis Aug 2026 (ships Sept 22) so the minimum is M5 Pro now; 128GB Ryzen boxes are up $400–1,400 since launch on memory prices."
     }
   ]
 }
