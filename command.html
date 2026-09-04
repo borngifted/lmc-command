@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMC COMMAND · Board</title>
+<meta name="description" content="Task & Project Command and the Idea Inbox — where LMC is on everything, and the 1 a.m. brain.">
+<meta name="theme-color" content="#0b1220">
+<style>
+:root{
+  --bg:#0b1220; --panel:#111c30; --panel2:#16243c; --line:#24344f;
+  --ink:#eaf1fb; --muted:#93a6c4; --accent:#4c8dff; --accent2:#37e0b0; --warn:#ffcf5c; --bad:#ff6b6b;
+  --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media(prefers-color-scheme:light){:root:not([data-t]){--bg:#f4f7fc;--panel:#fff;--panel2:#eef3fb;--line:#d8e2f0;--ink:#0b1220;--muted:#51617d}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--panel),transparent)}
+header .wrap{padding:18px 22px 20px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between}
+.brandline{display:flex;align-items:center;gap:12px}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 14px var(--accent2);animation:pulse 2.4s ease-in-out infinite}
+.dot.off{background:var(--muted);box-shadow:none;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.dot{animation:none}}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(22px,3.4vw,34px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-top:8px}
+h1 span{color:var(--muted);font-weight:600}
+.who{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.who img{width:30px;height:30px;border-radius:50%;border:1px solid var(--line)}
+.who .nm{font-weight:700;font-size:14px}
+.who .role{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--accent2);padding:2px 8px;border-radius:999px}
+.who .role.owner{color:var(--warn);border-color:var(--warn)}
+.who .role.ro{color:var(--muted);border-color:var(--line)}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap}
+nav.tabs button,nav.tabs a{background:var(--panel);border:1px solid var(--line);color:var(--muted);font-family:var(--f);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;cursor:pointer;text-decoration:none;transition:all .15s}
+nav.tabs button:hover,nav.tabs a:hover{color:var(--ink);border-color:var(--accent)}
+nav.tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+main{padding:22px 0 90px}
+.panel{display:none}.panel.on{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:800;letter-spacing:-.02em}
+h3{font-size:15px;font-weight:800;margin:18px 0 6px}
+.lede{color:var(--muted);max-width:70ch;margin:6px 0 18px}
+.notice{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:6px;padding:10px 14px;font-size:13.5px;color:var(--muted);margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.notice b{color:var(--ink)}
+.notice .btn{margin-left:auto}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.stat{background:var(--panel);padding:14px 16px;cursor:pointer}
+.stat:hover{background:var(--panel2)}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-top:2px}
+.stat.warn .v{color:var(--warn)}.stat.bad .v{color:var(--bad)}.stat.good .v{color:var(--accent2)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select,input[type=search],input[type=text],input[type=password],textarea{background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:var(--f);font-size:14px;padding:8px 12px;border-radius:6px}
+select{appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 55%,calc(100% - 10px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.bar input[type=search]{flex:1;min-width:160px}
+.btn{background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:var(--f);font-size:13px;font-weight:600;padding:8px 14px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.mint{background:var(--accent2);border-color:var(--accent2);color:#04231a}
+.btn.ghost{color:var(--muted)}
+.btn.sm{font-size:12px;padding:5px 10px}
+.btn.on{border-color:var(--accent2);color:var(--accent2)}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.proj{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:14px;background:var(--panel)}
+.proj>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:12px 16px;background:var(--panel2)}
+.proj>summary::-webkit-details-marker{display:none}
+.proj>summary .name{font-weight:800;font-size:15px}
+.proj>summary .cnt{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.proj>summary .bars{margin-left:auto;display:flex;height:6px;width:140px;border-radius:3px;overflow:hidden;background:var(--line)}
+.proj>summary .bars i{display:block;height:100%}
+.trow{display:grid;grid-template-columns:22px 1fr auto;gap:12px;padding:11px 16px;border-top:1px solid var(--line);align-items:start}
+.trow:hover{background:rgba(76,141,255,.05)}
+.trow.done .t{text-decoration:line-through;color:var(--muted)}
+.trow .t{font-size:14.5px;font-weight:600}
+.trow .n{font-size:12.5px;color:var(--muted);margin-top:2px}
+.trow .n b{color:var(--ink);font-weight:600}
+.trow .side{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.pill{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:2px 8px;border-radius:999px;color:var(--muted);white-space:nowrap}
+.pill.owner{color:var(--ink);border-color:var(--accent)}
+.pill.me{background:var(--accent);color:#fff}
+.pill.high{color:var(--bad);border-color:var(--bad)}
+.pill.blocked,.pill.waiting{color:var(--warn);border-color:var(--warn)}
+.pill.in_progress{color:var(--accent);border-color:var(--accent)}
+.pill.done{color:var(--accent2);border-color:var(--accent2)}
+.tick{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--line);margin-top:3px;cursor:pointer;display:grid;place-items:center;font-size:11px;color:var(--accent2)}
+.trow.done .tick{border-color:var(--accent2)}
+.trow.blocked-row .t::before{content:"⛔ ";font-size:11px}
+.addtask{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:16px}
+.addtask .more{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.capture{background:var(--panel);border:1px solid var(--accent2);border-radius:8px;padding:16px;margin-bottom:18px}
+.capture textarea{width:100%;min-height:64px;resize:vertical;font-size:16px}
+.capture .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.hint{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.inbox{display:flex;flex-direction:column;gap:8px}
+.idea{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent2);border-radius:6px;padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.idea.waiting_on,.idea.decision_needed{border-left-color:var(--warn)}
+.idea.follow_up,.idea.reminder{border-left-color:var(--accent)}
+.idea.triaged{opacity:.55}
+.idea .txt{font-size:15px;font-weight:600}
+.idea .meta{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
+.idea .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.idea select{font-size:12px;padding:4px 24px 4px 8px}
+.drop{display:block;border:1px dashed var(--line);border-radius:8px;padding:22px;text-align:center;color:var(--muted);background:var(--panel2);transition:all .15s;cursor:pointer}
+.drop.over{border-color:var(--accent2);background:rgba(55,224,176,.06)}
+.drop b{color:var(--ink)}
+.drop input{display:none}
+.src{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px}
+.srcs{display:flex;flex-direction:column;gap:6px;font-size:13.5px;margin-top:12px}
+.srcs div{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+code{font-family:var(--mono);color:var(--accent2);font-size:12.5px}
+.empty{color:var(--muted);padding:26px;text-align:center;border:1px dashed var(--line);border-radius:8px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--accent2);color:#04231a;font-weight:700;font-size:13px;padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:90vw}
+.toast.on{opacity:1}.toast.err{background:var(--bad);color:#fff}
+/* sign-in / guide */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:14px}
+.card.hi{border-color:var(--accent2)}
+.card ol,.card ul{padding-left:20px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.card li b{color:var(--ink)}
+.field{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.field input{flex:1;min-width:200px;font-family:var(--mono);font-size:13px}
+.log{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px;max-height:220px;overflow:auto}
+.log b{color:var(--ink);font-weight:600}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:480px;overflow:auto;padding:4px 0}
+.msg{max-width:85%;padding:10px 14px;border-radius:10px;font-size:14px;white-space:pre-wrap}
+.msg.u{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:3px}
+.msg.g{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:3px}
+.msg.g.wait{color:var(--muted);font-style:italic}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+footer{border-top:1px solid var(--line);padding:24px 0 50px;color:var(--muted);font-size:13px}
+@media(max-width:640px){.trow{grid-template-columns:22px 1fr}.trow .side{grid-column:2;justify-content:flex-start}.idea{grid-template-columns:1fr}.idea .acts{justify-content:flex-start}.notice .btn{margin-left:0}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div>
+    <div class="brandline"><span class="dot off" id="dot" aria-hidden="true"></span><span class="eyebrow" id="eyebrow">LMC COMMAND · board · local</span></div>
+    <h1>Where we are on everything <span>· and the 1 a.m. brain</span></h1>
+    <div class="who" id="who" style="margin-top:8px"></div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-p="tasks">Tasks &amp; projects</button>
+    <button role="tab" aria-selected="false" data-p="inbox">Idea inbox <span id="inboxN"></span></button>
+    <button role="tab" aria-selected="false" data-p="ingest">Import / export</button>
+    <button role="tab" aria-selected="false" data-p="guide">Guide</button>
+    <button role="tab" aria-selected="false" data-p="account" id="acctTab">Sign in</button>
+    <a href="index.html">← Hub</a>
+  </nav>
+</div></header>
+
+<main><div class="wrap">
+
+  <div class="notice" id="signNotice" hidden><span>You're viewing the board <b>on this device only</b>. Sign in with GitHub to share changes with the team and keep them when you switch devices.</span><button class="btn sm primary" data-go="account">Sign in</button></div>
+
+  <!-- ===== TASKS ===== -->
+  <section class="panel on" id="tasks" role="tabpanel">
+    <div class="stats" id="stats"></div>
+    <div class="bar">
+      <button class="btn sm" id="fMine">My tasks</button>
+      <select id="fOwner"><option value="">Everyone</option></select>
+      <select id="fProject"><option value="">All projects</option></select>
+      <select id="fCategory"><option value="">All categories</option></select>
+      <select id="fStatus">
+        <option value="">Any status</option>
+        <option value="open">Open (not done)</option>
+        <option value="in_progress">In progress</option>
+        <option value="blocked">Blocked</option>
+        <option value="waiting">Waiting</option>
+        <option value="not_started">Not started</option>
+        <option value="done">Done</option>
+      </select>
+      <input type="search" id="fQ" placeholder="Search tasks, next actions, notes…">
+      <button class="btn ghost sm" id="fClear">Clear</button>
+    </div>
+    <form class="addtask" id="addTask" autocomplete="off">
+      <input type="text" id="atTask" placeholder="Add a task… (project · owner · priority below)" required>
+      <button class="btn primary" type="submit">Add task</button>
+      <div class="more">
+        <input type="text" id="atProject" list="projList" placeholder="Project" style="min-width:180px">
+        <datalist id="projList"></datalist>
+        <select id="atOwner"><option>Leo</option><option>Jen</option><option>Kemp</option><option>Work Official</option><option>vendor</option></select>
+        <select id="atPri"><option value="medium">medium</option><option value="high">high</option><option value="low">low</option></select>
+        <input type="text" id="atWhen" placeholder="When (e.g. this week)" style="min-width:150px">
+        <input type="text" id="atNext" placeholder="Next action" style="flex:1;min-width:180px">
+      </div>
+    </form>
+    <div id="board"></div>
+    <p class="src" id="taskSrc"></p>
+  </section>
+
+  <!-- ===== INBOX ===== -->
+  <section class="panel" id="inbox" role="tabpanel">
+    <div class="capture">
+      <textarea id="capText" placeholder="Dump it here. An idea, a follow-up, a 'we should…', a name from a vendor call. One thing per capture." autocomplete="off"></textarea>
+      <div class="row">
+        <select id="capType">
+          <option value="idea">Idea</option>
+          <option value="follow_up">Follow-up</option>
+          <option value="decision_needed">Decision needed</option>
+          <option value="waiting_on">Waiting on</option>
+          <option value="reminder">Reminder</option>
+        </select>
+        <select id="capWho"><option>Leo</option><option>Jen</option><option>Kemp</option><option>Work Official</option></select>
+        <button class="btn mint" id="capBtn">Capture</button>
+        <span class="hint" id="capHint">⌘/Ctrl + Enter</span>
+      </div>
+    </div>
+    <div class="bar">
+      <select id="iFilter">
+        <option value="open">Open captures</option>
+        <option value="">Everything</option>
+        <option value="triaged">Triaged / done</option>
+      </select>
+      <span class="spacer"></span>
+      <button class="btn sm" id="iExport">Export lmc_ideas_followups.csv</button>
+    </div>
+    <div class="inbox" id="inboxList"></div>
+  </section>
+
+  <!-- ===== INGEST ===== -->
+  <section class="panel" id="ingest" role="tabpanel">
+    <h2>Import / export</h2>
+    <p class="lede">Drop the files that come out of the extraction prompts. They're read as-is —
+      same filenames, same columns. Signed in, an import is committed to <code>data/seed/</code>
+      in the repo so everyone gets it; signed out, it stays on this device.</p>
+    <label class="drop" id="drop">
+      <b>Drop <code>lmc_projects_tasks.csv</code> or <code>lmc_ideas_followups.csv</code> here</b><br>
+      or click to choose. Both at once is fine.
+      <input type="file" id="file" accept=".csv,text/csv" multiple>
+    </label>
+    <div class="srcs" id="srcs"></div>
+    <div class="bar" style="margin-top:18px">
+      <button class="btn sm" id="tExport">Export lmc_projects_tasks.csv</button>
+      <button class="btn sm" id="iExport2">Export lmc_ideas_followups.csv</button>
+      <span class="spacer"></span>
+      <button class="btn ghost sm" id="reset">Forget local-only changes on this device</button>
+    </div>
+    <h3>Recent changes</h3>
+    <div class="log" id="log"></div>
+    <p class="src">Seed files: <code>data/seed/</code> · shared board state: <code>data/board.json</code> · every signed-in change is a commit in the repo history. Additive and reversible.</p>
+  </section>
+
+  <!-- ===== GUIDE ===== -->
+  <section class="panel" id="guide" role="tabpanel">
+    <h2>Guide</h2>
+    <p class="lede">Gemini walks you through the board, sign-in, the extraction files and what to do next.
+      Ask it anything about LMC COMMAND — it already knows the setup, your role and the current state of the board.</p>
+    <div class="card hi" id="gemCard">
+      <div id="gemSetup">
+        <b>Connect Gemini once on this device.</b>
+        <ol style="margin-top:6px">
+          <li>Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> and press <b>Create API key</b> (free tier is fine).</li>
+          <li>Paste it below. It is stored only in this browser — never in the repo or on the page.</li>
+        </ol>
+        <div class="field"><input type="password" id="gemKey" placeholder="AIza…"><button class="btn primary" id="gemSave">Connect</button></div>
+        <p class="hint" style="margin-top:8px">No key handy? <button class="btn sm" id="gemCopy">Copy the guide prompt</button> then paste it into <a href="https://gemini.google.com/app" target="_blank" rel="noopener">gemini.google.com</a> — same guide, in the Gemini app.</p>
+      </div>
+      <div id="gemChatWrap" hidden>
+        <div class="chips" id="chips"></div>
+        <div class="chat" id="chat"></div>
+        <div class="field"><input type="text" id="gemIn" placeholder="Ask the guide…"><button class="btn primary" id="gemSend">Send</button><button class="btn ghost sm" id="gemForget" title="Remove the key from this device">Disconnect</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <b>The written version</b> — <a href="https://github.com/borngifted/lmc-command/blob/main/docs/JEN_ONBOARDING.md" target="_blank" rel="noopener">docs/JEN_ONBOARDING.md</a> ·
+      <a href="https://github.com/borngifted/lmc-command/blob/main/docs/EXTRACTION_PROMPTS.md" target="_blank" rel="noopener">EXTRACTION_PROMPTS.md</a> ·
+      <a href="https://github.com/borngifted/lmc-command/blob/main/docs/DEVELOPER_HANDOFF.md" target="_blank" rel="noopener">DEVELOPER_HANDOFF.md</a>
+    </div>
+  </section>
+
+  <!-- ===== ACCOUNT ===== -->
+  <section class="panel" id="account" role="tabpanel">
+    <h2 id="acctH">Sign in</h2>
+    <p class="lede">The board is owned by Work Official's GitHub (<code>borngifted</code>) — the owner/admin.
+      Team members sign in with their own GitHub account; the owner grants and revokes access
+      from the repo's collaborators. Every change you make is saved as a commit under your name.</p>
+    <div class="card" id="signedOut">
+      <b>Sign in with a GitHub token</b>
+      <ol style="margin-top:6px">
+        <li>You need a GitHub account that the owner has added as a collaborator on <code>borngifted/lmc-command</code>. (Ask the Guide if you're not sure.)</li>
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+        <li>Name it <b>LMC COMMAND</b>. Expiration: 1 year. Repository access: <b>Only select repositories → lmc-command</b>.</li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b>. Generate, copy.</li>
+        <li>Paste it here. It's kept only in this browser.</li>
+      </ol>
+      <div class="field"><input type="password" id="tok" placeholder="github_pat_…"><button class="btn primary" id="tokBtn">Sign in</button></div>
+      <p class="hint" id="tokMsg" style="margin-top:8px"></p>
+    </div>
+    <div class="card" id="signedIn" hidden>
+      <div class="who" id="who2"></div>
+      <p style="font-size:14px;color:var(--muted);margin-top:10px" id="acctMsg"></p>
+      <div class="field"><button class="btn" id="syncNow">Sync now</button><button class="btn ghost" id="signOut">Sign out on this device</button></div>
+    </div>
+    <div class="card">
+      <b>Who are you on the board?</b> <span class="hint">sets "My tasks" and the default owner on captures</span>
+      <div class="field"><select id="meSel"><option value="">— choose —</option><option>Leo</option><option>Jen</option><option>Kemp</option><option>Work Official</option></select></div>
+    </div>
+    <div class="card" id="ownerCard" hidden>
+      <b>Owner tools</b>
+      <p style="font-size:14px;color:var(--muted);margin:6px 0">Add a team member by GitHub username. They get <b>write</b> access to this repo only; remove them the same way. You stay the only admin.</p>
+      <div class="field"><input type="text" id="collab" placeholder="github-username"><button class="btn primary" id="collabAdd">Invite</button></div>
+      <div class="log" id="collabList" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+</div></main>
+
+<footer><div class="wrap">LMC COMMAND · Task &amp; Project Command + Idea Inbox · milestone 1 · <a href="index.html">back to the hub</a></div></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= config ================= */
+var REPO='borngifted/lmc-command', BRANCH='main', OWNER='borngifted';
+var API='https://api.github.com/repos/'+REPO;
+var SEEDS={tasks:'data/seed/lmc_projects_tasks.csv',ideas:'data/seed/lmc_ideas_followups.csv'};
+var BOARD='data/board.json';
+var TASK_COLS=['project','task','category','status','owner','due_or_timeframe','priority','blocked_by','next_action','notes','source_file'];
+var IDEA_COLS=['item','type','related_project','who_owns_it','needs_response_from','time_sensitivity','status','notes','source_file'];
+
+/* ================= utils ================= */
+function $(i){return document.getElementById(i);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function U(v){return !v||v==='UNKNOWN'?'':v;}
+function now(){return new Date().toISOString().slice(0,16).replace('T',' ');}
+function toast(m,err){var t=$('toast');t.textContent=m;t.className='toast on'+(err?' err':'');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on');},err?4000:1800);}
+function b64e(s){return btoa(unescape(encodeURIComponent(s)));}
+function b64d(s){return decodeURIComponent(escape(atob(String(s).replace(/\n/g,''))));}
+function parseCSV(text){
+  var rows=[],row=[],cur='',q=false,i=0,c;
+  text=(text||'').replace(/^﻿/,'');
+  for(;i<text.length;i++){
+    c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=c; }
+    else{
+      if(c==='"')q=true;
+      else if(c===','){row.push(cur);cur='';}
+      else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n')i++; row.push(cur);rows.push(row);row=[];cur=''; }
+      else cur+=c;
+    }
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  rows=rows.filter(function(r){return r.some(function(v){return v.trim()!=='';});});
+  if(!rows.length)return [];
+  var head=rows[0].map(function(h){return h.trim().toLowerCase();});
+  return rows.slice(1).map(function(r){var o={};head.forEach(function(h,k){o[h]=(r[k]||'').trim();});return o;});
+}
+function toCSV(cols,objs){
+  var e=function(v){v=v==null?'':String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  return [cols.join(',')].concat(objs.map(function(o){return cols.map(function(c){return e(o[c]);}).join(',');})).join('\n')+'\n';
+}
+function kTask(t){return (t.project+'|'+t.task).toLowerCase();}
+function kIdea(i){return 'i:'+String(i.item).toLowerCase();}
+
+/* ================= state ================= */
+/* seed = repo CSVs; shared = data/board.json (repo, everyone); local = this device only (signed out) */
+var S={seed:{tasks:[],ideas:[]}, shared:{overrides:{},tasks:[],ideas:[],log:[],sources:{}}, sharedSha:null,
+       local:{overrides:{},tasks:[],ideas:[],sources:{}}, me:'', auth:null};
+var LS='lmc_command_v2';
+function loadLocal(){try{var j=JSON.parse(localStorage.getItem(LS));if(j){S.local=Object.assign(S.local,j.local||{});S.me=j.me||'';}}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify({local:S.local,me:S.me}));}catch(e){}}
+function getTok(){try{return localStorage.getItem('lmc_gh_token')||'';}catch(e){return '';}}
+function setTok(t){try{t?localStorage.setItem('lmc_gh_token',t):localStorage.removeItem('lmc_gh_token');}catch(e){}}
+function getGem(){try{return localStorage.getItem('lmc_gemini_key')||'';}catch(e){return '';}}
+function setGem(t){try{t?localStorage.setItem('lmc_gemini_key',t):localStorage.removeItem('lmc_gemini_key');}catch(e){}}
+function signedIn(){return !!(S.auth&&S.auth.canWrite);}
+
+function allTasks(){
+  var seen={},out=[];
+  [].concat(S.local.tasks,S.shared.tasks,S.seed.tasks).forEach(function(t){
+    var k=kTask(t); if(seen[k])return; seen[k]=1;
+    var o=Object.assign({},t,S.shared.overrides[k]||{},S.local.overrides[k]||{}); o._k=k; out.push(o);
+  });
+  return out;
+}
+function allIdeas(){
+  var seen={},out=[];
+  [].concat(S.local.ideas,S.shared.ideas,S.seed.ideas).forEach(function(t){
+    var k=kIdea(t); if(seen[k])return; seen[k]=1;
+    var o=Object.assign({},t,S.shared.overrides[k]||{},S.local.overrides[k]||{}); o._k=k; out.push(o);
+  });
+  return out;
+}
+
+/* ================= GitHub I/O ================= */
+function gh(path,opt){
+  opt=opt||{}; var h={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  var tok=getTok(); if(tok)h['Authorization']='Bearer '+tok;
+  if(opt.body){h['Content-Type']='application/json';opt.body=JSON.stringify(opt.body);}
+  opt.headers=h;
+  return fetch(path.indexOf('http')===0?path:API+path,opt).then(function(r){
+    if(r.status===204)return {};
+    return r.json().then(function(j){ if(!r.ok){var e=new Error(j.message||('HTTP '+r.status));e.status=r.status;throw e;} return j; });
+  });
+}
+function readRepoFile(path){ /* fresh via API when signed in, else same-origin (Pages) */
+  if(getTok())return gh('/contents/'+path+'?ref='+BRANCH).then(function(j){return {text:b64d(j.content),sha:j.sha};}).catch(function(e){if(e.status===404)return {text:'',sha:null};throw e;});
+  return fetch(path+'?t='+Date.now()).then(function(r){return r.ok?r.text():'';}).then(function(t){return {text:t,sha:null};}).catch(function(){return {text:'',sha:null};});
+}
+function writeRepoFile(path,text,msg,sha){
+  var body={message:msg,content:b64e(text),branch:BRANCH}; if(sha)body.sha=sha;
+  return gh('/contents/'+path,{method:'PUT',body:body});
+}
+/* read → mutate → write the shared board, retrying once on a stale sha */
+function commitBoard(msg,mutate,attempt){
+  attempt=attempt||0;
+  return readRepoFile(BOARD).then(function(f){
+    var doc=f.text?JSON.parse(f.text):{overrides:{},tasks:[],ideas:[],log:[],sources:{}};
+    doc.overrides=doc.overrides||{};doc.tasks=doc.tasks||[];doc.ideas=doc.ideas||[];doc.log=doc.log||[];doc.sources=doc.sources||{};
+    mutate(doc);
+    doc.updated=now(); doc.by=S.auth.login;
+    doc.log.unshift({at:doc.updated,by:S.auth.login,what:msg}); doc.log=doc.log.slice(0,200);
+    return writeRepoFile(BOARD,JSON.stringify(doc,null,2)+'\n','board: '+msg+' ('+S.auth.login+')',f.sha).then(function(r){
+      S.shared=doc; S.sharedSha=r.content&&r.content.sha; renderAll();
+    });
+  }).catch(function(e){
+    if(attempt<1&&(e.status===409||e.status===422))return commitBoard(msg,mutate,attempt+1);
+    toast('Could not save: '+e.message,true); throw e;
+  });
+}
+function refresh(){
+  var tok=getTok();
+  return Promise.all([readRepoFile(SEEDS.tasks),readRepoFile(SEEDS.ideas),readRepoFile(BOARD)]).then(function(r){
+    S.seed.tasks=parseCSV(r[0].text); S.seed.ideas=parseCSV(r[1].text);
+    if(r[2].text){try{S.shared=Object.assign({overrides:{},tasks:[],ideas:[],log:[],sources:{}},JSON.parse(r[2].text));}catch(e){}}
+    S.sharedSha=r[2].sha; renderAll();
+  });
+}
+
+/* ================= auth ================= */
+function whoami(){
+  var tok=getTok(); if(!tok){S.auth=null;renderAuth();return Promise.resolve();}
+  return gh('https://api.github.com/user').then(function(u){
+    return gh('').then(function(repo){
+      var p=repo.permissions||{};
+      S.auth={login:u.login,name:u.name||u.login,avatar:u.avatar_url,admin:!!p.admin,canWrite:!!(p.push||p.admin)};
+      renderAuth(); if(S.auth.admin)loadCollabs();
+      /* first sign-in on a device: fold local-only changes into the shared board */
+      var n=Object.keys(S.local.overrides).length+S.local.tasks.length+S.local.ideas.length;
+      if(S.auth.canWrite&&n){
+        var L=S.local;
+        return commitBoard('synced '+n+' change'+(n>1?'s':'')+' from '+S.auth.login+"'s device",function(d){
+          Object.keys(L.overrides).forEach(function(k){d.overrides[k]=Object.assign({},d.overrides[k],L.overrides[k]);});
+          d.tasks=L.tasks.concat(d.tasks); d.ideas=L.ideas.concat(d.ideas);
+        }).then(function(){S.local={overrides:{},tasks:[],ideas:[],sources:{}};saveLocal();toast('Synced your local changes to the team board');});
+      }
+    });
+  }).catch(function(e){
+    S.auth=null; renderAuth();
+    $('tokMsg').textContent='Sign-in failed: '+e.message+(e.status===401?' — token invalid or expired.':e.status===404?' — this account is not a collaborator on the repo yet.':'');
+  });
+}
+function renderAuth(){
+  var a=S.auth, on=!!a;
+  $('dot').classList.toggle('off',!on);
+  $('eyebrow').textContent='LMC COMMAND · board · '+(on?(a.canWrite?'synced with the team':'read-only'):'this device only');
+  $('signNotice').hidden=on; $('signedOut').hidden=on; $('signedIn').hidden=!on; $('ownerCard').hidden=!(on&&a.admin);
+  $('acctTab').textContent=on?a.login:'Sign in'; $('acctH').textContent=on?'Account':'Sign in';
+  var role=on?(a.admin?'<span class="role owner">Owner · admin</span>':a.canWrite?'<span class="role">Team · can edit</span>':'<span class="role ro">Read only</span>'):'';
+  var html=on?'<img src="'+esc(a.avatar)+'" alt=""><span class="nm">'+esc(a.name)+'</span>'+role:'';
+  $('who').innerHTML=html; $('who2').innerHTML=html;
+  if(on)$('acctMsg').textContent=a.canWrite?'Your changes are committed to the repo as '+a.login+' and appear for everyone.':'You can view the board but this account has no write access to the repo. Ask the owner to add you as a collaborator.';
+  $('meSel').value=S.me;
+  $('capHint').textContent=(signedIn()?'shared with the team':'saved on this device')+' · ⌘/Ctrl + Enter';
+}
+$('tokBtn').addEventListener('click',function(){var t=$('tok').value.trim();if(!t)return;setTok(t);$('tok').value='';$('tokMsg').textContent='Checking…';whoami().then(refresh);});
+$('tok').addEventListener('keydown',function(e){if(e.key==='Enter')$('tokBtn').click();});
+$('signOut').addEventListener('click',function(){setTok('');S.auth=null;renderAuth();toast('Signed out on this device');});
+$('syncNow').addEventListener('click',function(){refresh().then(function(){toast('Up to date');});});
+$('meSel').addEventListener('change',function(){S.me=this.value;saveLocal();$('capWho').value=S.me||'Leo';$('atOwner').value=S.me||'Leo';renderTasks();});
+function loadCollabs(){
+  gh('/collaborators').then(function(list){
+    $('collabList').innerHTML=list.map(function(c){
+      var role=c.permissions.admin?'owner · admin':c.permissions.push?'can edit':'read';
+      return '<div><b>'+esc(c.login)+'</b> · '+role+(c.login!==OWNER?' · <a href="#" data-rm="'+esc(c.login)+'">remove</a>':'')+'</div>';
+    }).join('')||'<div>Only you so far.</div>';
+  }).catch(function(){});
+}
+$('collabAdd').addEventListener('click',function(){
+  var u=$('collab').value.trim().replace(/^@/,''); if(!u)return;
+  gh('/collaborators/'+encodeURIComponent(u),{method:'PUT',body:{permission:'push'}}).then(function(){toast('Invited '+u+' — they get an email from GitHub to accept');$('collab').value='';loadCollabs();}).catch(function(e){toast('Invite failed: '+e.message,true);});
+});
+$('collabList').addEventListener('click',function(e){
+  var a=e.target.closest('[data-rm]'); if(!a)return; e.preventDefault();
+  var u=a.dataset.rm; if(!confirm('Remove '+u+' from the repo? They lose board access immediately.'))return;
+  gh('/collaborators/'+encodeURIComponent(u),{method:'DELETE'}).then(function(){toast('Removed '+u);loadCollabs();}).catch(function(e){toast(e.message,true);});
+});
+
+/* ================= writes (shared when signed in, else local) ================= */
+function applyOverride(k,patch,msg){
+  if(signedIn())return commitBoard(msg,function(d){d.overrides[k]=Object.assign({},d.overrides[k],patch);});
+  S.local.overrides[k]=Object.assign({},S.local.overrides[k],patch); saveLocal(); renderAll(); return Promise.resolve();
+}
+function addTask(t){
+  if(signedIn())return commitBoard('added task "'+t.task+'"',function(d){d.tasks.unshift(t);});
+  S.local.tasks.unshift(t); saveLocal(); renderAll(); return Promise.resolve();
+}
+function addIdea(i){
+  if(signedIn())return commitBoard('captured "'+i.item.slice(0,60)+'"',function(d){d.ideas.unshift(i);});
+  S.local.ideas.unshift(i); saveLocal(); renderAll(); return Promise.resolve();
+}
+
+/* ================= tasks view ================= */
+var F={owner:'',project:'',category:'',status:'',q:'',mine:false};
+function fillSel(sel,vals,keep){var cur=sel.value;sel.innerHTML='<option value="">'+keep+'</option>';vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});sel.value=cur;}
+function uniq(arr,key){var s={};arr.forEach(function(t){var v=U(t[key]);if(v)s[v]=1;});return Object.keys(s).sort();}
+function renderTasks(){
+  var T=allTasks();
+  fillSel($('fOwner'),uniq(T,'owner'),'Everyone'); fillSel($('fProject'),uniq(T,'project'),'All projects'); fillSel($('fCategory'),uniq(T,'category'),'All categories');
+  $('projList').innerHTML=uniq(T,'project').map(function(p){return '<option value="'+esc(p)+'">';}).join('');
+  $('fMine').classList.toggle('on',F.mine); $('fMine').textContent=S.me?(F.mine?'✓ My tasks':'My tasks ('+S.me+')'):'My tasks';
+  var open=T.filter(function(t){return t.status!=='done';});
+  var st=[
+    ['Open tasks',open.length,'','open'],
+    ['In progress',T.filter(function(t){return t.status==='in_progress';}).length,'good','in_progress'],
+    ['Blocked / waiting',T.filter(function(t){return t.status==='blocked'||t.status==='waiting';}).length,'warn','blocked'],
+    ['High priority open',open.filter(function(t){return t.priority==='high';}).length,'bad','high'],
+    ['Projects',uniq(T,'project').length,'',''],
+    ['Done',T.length-open.length,'','done']
+  ];
+  $('stats').innerHTML=st.map(function(s){return '<div class="stat '+s[1]+'" data-st="'+s[3]+'"><div class="k">'+s[0]+'</div><div class="v">'+s[1]+'</div></div>';}).join('');
+  var q=F.q.toLowerCase();
+  var rows=T.filter(function(t){
+    if(F.mine&&S.me&&t.owner!==S.me)return false;
+    if(F.owner&&t.owner!==F.owner)return false;
+    if(F.project&&t.project!==F.project)return false;
+    if(F.category&&t.category!==F.category)return false;
+    if(F.status==='open'?t.status==='done':F.status==='high'?(t.priority!=='high'||t.status==='done'):F.status==='blocked'?!(t.status==='blocked'||t.status==='waiting'):(F.status&&t.status!==F.status))return false;
+    if(q&&!(t.task+' '+t.next_action+' '+t.notes+' '+t.project+' '+t.blocked_by).toLowerCase().includes(q))return false;
+    return true;
+  });
+  var byP={},order=[];
+  rows.forEach(function(t){var p=t.project||'(no project)';if(!byP[p]){byP[p]=[];order.push(p);}byP[p].push(t);});
+  var pr={high:0,medium:1,low:2,'':3,UNKNOWN:3}, so={blocked:0,in_progress:1,waiting:2,not_started:3,UNKNOWN:4,'':4,done:9};
+  var el=$('board');
+  if(!order.length){el.innerHTML='<div class="empty">Nothing matches. Clear the filters, add a task above, or import <code>lmc_projects_tasks.csv</code>.</div>';}
+  else el.innerHTML=order.map(function(p){
+    var ts=byP[p].slice().sort(function(a,b){return (so[a.status]||4)-(so[b.status]||4)||(pr[a.priority]||3)-(pr[b.priority]||3);});
+    var n=ts.length,d=ts.filter(function(t){return t.status==='done';}).length,ip=ts.filter(function(t){return t.status==='in_progress';}).length,bl=ts.filter(function(t){return t.status==='blocked'||t.status==='waiting';}).length;
+    var bars='<span class="bars" title="'+d+' done · '+ip+' in progress · '+bl+' blocked/waiting"><i style="width:'+(d/n*100)+'%;background:var(--accent2)"></i><i style="width:'+(ip/n*100)+'%;background:var(--accent)"></i><i style="width:'+(bl/n*100)+'%;background:var(--warn)"></i></span>';
+    return '<details class="proj" open><summary><span class="name">'+esc(p)+'</span><span class="cnt">'+(n-d)+' open / '+n+'</span>'+bars+'</summary>'+ts.map(rowHTML).join('')+'</details>';
+  }).join('');
+  $('taskSrc').textContent=T.length+' tasks · '+S.seed.tasks.length+' from seed files · '+(S.shared.tasks||[]).length+' added on the shared board'+(S.local.tasks.length?' · '+S.local.tasks.length+' on this device only':'')+(S.shared.updated?' · last team change '+S.shared.updated+' by '+S.shared.by:'');
+}
+function rowHTML(t){
+  var done=t.status==='done', bl=t.status==='blocked'||U(t.blocked_by), n=[];
+  if(U(t.next_action))n.push('<b>Next:</b> '+esc(t.next_action));
+  if(U(t.blocked_by))n.push('<b>Blocked by:</b> '+esc(t.blocked_by));
+  if(U(t.due_or_timeframe))n.push('<b>When:</b> '+esc(t.due_or_timeframe));
+  if(U(t.notes))n.push(esc(t.notes));
+  var sts=['not_started','in_progress','blocked','waiting','done'];
+  var sel='<select class="stsel" title="Change status" style="font-size:11px;padding:2px 22px 2px 6px">'+sts.map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>';}).join('')+(sts.indexOf(t.status)<0?'<option selected>'+esc(U(t.status)||'unknown')+'</option>':'')+'</select>';
+  return '<div class="trow '+(done?'done':'')+(bl&&!done?' blocked-row':'')+'" data-k="'+esc(t._k)+'">'
+    +'<span class="tick" role="checkbox" aria-checked="'+done+'" tabindex="0" title="Mark done / reopen">'+(done?'✓':'')+'</span>'
+    +'<div><div class="t">'+esc(t.task)+'</div>'+(n.length?'<div class="n">'+n.join(' · ')+'</div>':'')+'</div>'
+    +'<div class="side">'+(U(t.owner)?'<span class="pill owner'+(S.me&&t.owner===S.me?' me':'')+'">'+esc(t.owner)+'</span>':'')
+    +(U(t.category)?'<span class="pill">'+esc(t.category)+'</span>':'')
+    +(t.priority==='high'?'<span class="pill high">high</span>':'')+sel+'</div></div>';
+}
+$('board').addEventListener('click',function(e){
+  var tk=e.target.closest('.tick'); if(!tk)return;
+  var k=tk.closest('.trow').dataset.k, t=allTasks().find(function(x){return x._k===k;}); if(!t)return;
+  var ns=t.status==='done'?'in_progress':'done';
+  applyOverride(k,{status:ns},(ns==='done'?'completed':'reopened')+' "'+t.task+'"');
+});
+$('board').addEventListener('change',function(e){
+  var s=e.target.closest('.stsel'); if(!s)return;
+  var k=s.closest('.trow').dataset.k, t=allTasks().find(function(x){return x._k===k;}); if(!t)return;
+  applyOverride(k,{status:s.value},'set "'+t.task+'" → '+s.value.replace('_',' '));
+});
+$('board').addEventListener('keydown',function(e){if((e.key===' '||e.key==='Enter')&&e.target.classList.contains('tick')){e.preventDefault();e.target.click();}});
+$('stats').addEventListener('click',function(e){var s=e.target.closest('.stat');if(!s)return;F.status=s.dataset.st;$('fStatus').value=['open','in_progress','blocked','done'].indexOf(F.status)>-1?F.status:'';renderTasks();});
+['fOwner','fProject','fCategory','fStatus'].forEach(function(i){$(i).addEventListener('change',function(){F[i.slice(1).toLowerCase()]=this.value;renderTasks();});});
+$('fQ').addEventListener('input',function(){F.q=this.value;renderTasks();});
+$('fMine').addEventListener('click',function(){if(!S.me){go('account');toast('Pick who you are first');return;}F.mine=!F.mine;renderTasks();});
+$('fClear').addEventListener('click',function(){F={owner:'',project:'',category:'',status:'',q:'',mine:false};['fOwner','fProject','fCategory','fStatus','fQ'].forEach(function(i){$(i).value='';});renderTasks();});
+$('addTask').addEventListener('submit',function(e){
+  e.preventDefault();
+  var t={project:$('atProject').value.trim()||'General',task:$('atTask').value.trim(),category:'',status:'not_started',owner:$('atOwner').value,due_or_timeframe:$('atWhen').value.trim(),priority:$('atPri').value,blocked_by:'',next_action:$('atNext').value.trim(),notes:'added '+now()+(S.auth?' by '+S.auth.login:''),source_file:'board'};
+  if(!t.task)return;
+  addTask(t).then(function(){['atTask','atWhen','atNext'].forEach(function(i){$(i).value='';});toast('Task added');});
+});
+
+/* ================= inbox ================= */
+function capture(){
+  var ta=$('capText'), txt=ta.value.trim(); if(!txt)return;
+  addIdea({item:txt,type:$('capType').value,related_project:'',who_owns_it:$('capWho').value,needs_response_from:'',time_sensitivity:'',status:'open',notes:'captured '+now()+(S.auth?' by '+S.auth.login:''),source_file:'board capture'})
+    .then(function(){ta.value='';toast('Captured. It will not get lost.');});
+}
+$('capBtn').addEventListener('click',capture);
+$('capText').addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key==='Enter')capture();});
+$('iFilter').addEventListener('change',renderInbox);
+function renderInbox(){
+  var I=allIdeas(), f=$('iFilter').value, projects=uniq(allTasks(),'project');
+  var openN=I.filter(function(i){return i.status!=='triaged'&&i.status!=='done';}).length;
+  $('inboxN').textContent=openN?'· '+openN:'';
+  var rows=I.filter(function(i){var tr=i.status==='triaged'||i.status==='done';return f===''||(f==='open'?!tr:tr);});
+  var el=$('inboxList');
+  if(!rows.length){el.innerHTML='<div class="empty">Inbox zero. Capture something above, or import <code>lmc_ideas_followups.csv</code>.</div>';return;}
+  el.innerHTML=rows.map(function(i){
+    var tr=i.status==='triaged'||i.status==='done', meta=[];
+    if(U(i.who_owns_it))meta.push('owner '+esc(i.who_owns_it));
+    if(U(i.needs_response_from))meta.push('needs '+esc(i.needs_response_from));
+    if(U(i.time_sensitivity))meta.push(esc(i.time_sensitivity)+' urgency');
+    if(U(i.related_project))meta.push('→ '+esc(i.related_project));
+    if(U(i.notes))meta.push(esc(i.notes));
+    var opts='<option value="">Triage into project…</option>'+projects.map(function(p){return '<option'+(i.related_project===p?' selected':'')+'>'+esc(p)+'</option>';}).join('');
+    return '<div class="idea '+esc(i.type)+(tr?' triaged':'')+'" data-k="'+esc(i._k)+'"><div><div class="txt">'+esc(i.item)+'</div><div class="meta"><span class="pill">'+esc(U(i.type)||'idea').replace('_',' ')+'</span>'+meta.map(function(m){return '<span>'+m+'</span>';}).join('')+'</div></div>'
+      +'<div class="acts"><select class="triage">'+opts+'</select><button class="btn sm '+(tr?'ghost':'')+'" data-a="toggle">'+(tr?'Reopen':'Done')+'</button></div></div>';
+  }).join('');
+}
+$('inboxList').addEventListener('change',function(e){
+  var s=e.target.closest('.triage'); if(!s)return;
+  var k=s.closest('.idea').dataset.k, i=allIdeas().find(function(x){return x._k===k;}); if(!i)return;
+  applyOverride(k,{related_project:s.value,status:s.value?'triaged':'open'},(s.value?'triaged "'+i.item.slice(0,40)+'" → '+s.value:'un-triaged "'+i.item.slice(0,40)+'"')).then(function(){if(s.value)toast('Triaged → '+s.value);});
+});
+$('inboxList').addEventListener('click',function(e){
+  var b=e.target.closest('[data-a=toggle]'); if(!b)return;
+  var k=b.closest('.idea').dataset.k, i=allIdeas().find(function(x){return x._k===k;}); if(!i)return;
+  var tr=i.status==='triaged'||i.status==='done';
+  applyOverride(k,{status:tr?'open':'done'},(tr?'reopened':'closed')+' idea "'+i.item.slice(0,40)+'"');
+});
+
+/* ================= ingest / export ================= */
+function ingestFile(file){
+  var r=new FileReader();
+  r.onload=function(){
+    var rows=parseCSV(r.result), name=file.name.toLowerCase();
+    var kind=(rows[0]&&'task' in rows[0])?'tasks':(rows[0]&&'item' in rows[0])?'ideas':null;
+    if(!kind||!rows.length){toast('Could not read '+file.name+' — expected the extraction-prompt columns',true);return;}
+    if(signedIn()){
+      var path=SEEDS[kind];
+      readRepoFile(path).then(function(f){return writeRepoFile(path,r.result,'seed: import '+file.name+' ('+rows.length+' '+kind+') by '+S.auth.login,f.sha);})
+        .then(function(){return commitBoard('imported '+file.name+' ('+rows.length+' '+kind+')',function(d){d.sources[file.name]={rows:rows.length,kind:kind,at:now(),by:S.auth.login};});})
+        .then(refresh).then(function(){toast('Imported '+rows.length+' '+kind+' — committed for the whole team');})
+        .catch(function(e){toast('Import failed: '+e.message,true);});
+    }else{
+      rows.forEach(function(t){t._src=file.name;});
+      S.local[kind]=rows.concat(S.local[kind].filter(function(t){return t._src!==file.name;}));
+      S.local.sources[file.name]={rows:rows.length,kind:kind,at:now()};
+      saveLocal(); renderAll(); toast('Imported '+rows.length+' '+kind+' on this device — sign in to share');
+    }
+  };
+  r.readAsText(file);
+}
+var drop=$('drop');
+drop.addEventListener('dragover',function(e){e.preventDefault();drop.classList.add('over');});
+drop.addEventListener('dragleave',function(){drop.classList.remove('over');});
+drop.addEventListener('drop',function(e){e.preventDefault();drop.classList.remove('over');Array.prototype.forEach.call(e.dataTransfer.files,ingestFile);});
+$('file').addEventListener('change',function(){Array.prototype.forEach.call(this.files,ingestFile);this.value='';});
+function download(name,text){var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(text);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('Exported '+name);}
+$('tExport').addEventListener('click',function(){download('lmc_projects_tasks.csv',toCSV(TASK_COLS,allTasks()));});
+function exportIdeas(){download('lmc_ideas_followups.csv',toCSV(IDEA_COLS,allIdeas()));}
+$('iExport').addEventListener('click',exportIdeas); $('iExport2').addEventListener('click',exportIdeas);
+$('reset').addEventListener('click',function(){
+  if(!confirm('Forget imports, captures and status changes made on this device while signed out? Shared board data in the repo is untouched.'))return;
+  S.local={overrides:{},tasks:[],ideas:[],sources:{}};saveLocal();renderAll();toast('Local-only changes forgotten');
+});
+function renderSources(){
+  var el=$('srcs'), sh=S.shared.sources||{}, lo=S.local.sources||{};
+  el.innerHTML='<div><span><code>data/seed/lmc_projects_tasks.csv</code> · '+S.seed.tasks.length+' tasks</span><span>repo seed</span></div>'
+    +'<div><span><code>data/seed/lmc_ideas_followups.csv</code> · '+S.seed.ideas.length+' ideas</span><span>repo seed</span></div>'
+    +Object.keys(sh).map(function(k){var s=sh[k];return '<div><span><code>'+esc(k)+'</code> · '+s.rows+' '+s.kind+'</span><span>imported '+esc(s.at)+' by '+esc(s.by||'')+'</span></div>';}).join('')
+    +Object.keys(lo).map(function(k){var s=lo[k];return '<div><span><code>'+esc(k)+'</code> · '+s.rows+' '+s.kind+'</span><span>this device only · '+esc(s.at)+'</span></div>';}).join('');
+  $('log').innerHTML=(S.shared.log||[]).slice(0,40).map(function(l){return '<div><b>'+esc(l.by)+'</b> '+esc(l.what)+' <span>· '+esc(l.at)+'</span></div>';}).join('')||'<div>No shared changes yet.</div>';
+}
+function renderAll(){renderTasks();renderInbox();renderSources();renderAuth();}
+
+/* ================= Gemini guide ================= */
+var GUIDE_DOC=null; /* docs/JEN_ONBOARDING.md, fetched */
+function boardSummary(){
+  var T=allTasks(), open=T.filter(function(t){return t.status!=='done';});
+  var mine=S.me?open.filter(function(t){return t.owner===S.me;}):[];
+  return 'BOARD STATE RIGHT NOW: '+T.length+' tasks across '+uniq(T,'project').length+' projects; '+open.length+' open, '
+    +open.filter(function(t){return t.status==='blocked'||t.status==='waiting';}).length+' blocked/waiting, '
+    +open.filter(function(t){return t.priority==='high';}).length+' high priority. '+allIdeas().filter(function(i){return i.status!=='triaged'&&i.status!=='done';}).length+' open captures in the Idea Inbox.\n'
+    +'VIEWER: '+(S.auth?(S.auth.name+' (GitHub '+S.auth.login+', '+(S.auth.admin?'OWNER/ADMIN':S.auth.canWrite?'team member with edit access':'read-only')+')'):'NOT signed in (changes stay on this device)')
+    +(S.me?'; identifies as '+S.me+' on the board':'; has not chosen who they are on the board yet')+'.\n'
+    +(mine.length?'THEIR OPEN TASKS: '+mine.map(function(t){return '['+t.project+'] '+t.task+(U(t.next_action)?' → next: '+t.next_action:'');}).join(' | '):'')
+    +'\nOPEN TASKS (all): '+open.slice(0,40).map(function(t){return '['+t.project+'] '+t.task+' ('+t.owner+', '+t.status+')';}).join(' | ');
+}
+function systemPrompt(){
+  return 'You are the LMC COMMAND onboarding guide, built by Work Official LLC for Leo Marshall Creative (LMC). You are talking to a member of the LMC team inside the LMC COMMAND board web app (https://borngifted.github.io/lmc-command/command.html). '
+  +'Your job: get them productive fast — signed in, oriented, and clear on their next action — in plain, warm, specific language. Short answers, numbered steps when giving instructions, one question at a time. Never invent features; if unsure, say so and point to the written docs.\n\n'
+  +'ROLES: Work Official (GitHub borngifted) is the owner/admin of the system. Jen is LMC Operations and the developer on LMC\'s side — she runs the extraction prompts, sends the seed files, and manages Leo. Leo is the principal/creative. Kemp is the editor (pulls the subscription list). Tarifa is a stakeholder Jen answers to.\n\n'
+  +'HOW THE BOARD WORKS: Tabs — Tasks & projects (grouped by project, filter by owner/project/category/status, "My tasks", tick to complete, status dropdown, add task), Idea inbox (one-field capture, ⌘/Ctrl+Enter, triage into a project, export CSV), Import / export (drop lmc_projects_tasks.csv / lmc_ideas_followups.csv from the extraction prompts; signed in they are committed to the repo for everyone), Guide (you), Account (sign in, choose who you are, owner tools). Signed out, changes stay on that device only; signing in syncs them to the shared board. Data lives in the GitHub repo borngifted/lmc-command: data/seed/*.csv (seed files) and data/board.json (shared changes). Every signed-in change is a commit under the person\'s GitHub name — additive and reversible.\n\n'
+  +'SIGN-IN STEPS (GitHub token): 1) Have a GitHub account (github.com/signup, free). 2) Tell the owner your username so they can add you as a collaborator on borngifted/lmc-command (Account tab → Owner tools → Invite), then accept the invitation email from GitHub. 3) Go to github.com/settings/personal-access-tokens/new — name "LMC COMMAND", expiration 1 year, Repository access: Only select repositories → lmc-command, Permissions → Repository permissions → Contents: Read and write → Generate → copy. 4) Board → Account tab → paste → Sign in. 5) Choose who you are (Leo/Jen/Kemp) so "My tasks" works. The token is stored only in that browser.\n\n'
+  +'THE SEED FILES (Jen\'s first job): open docs/EXTRACTION_PROMPTS.md, paste prompt 0 then 1–7 one at a time into the shared ChatGPT thread that holds Leo\'s project files, save each output with the named filename, then drop lmc_projects_tasks.csv and lmc_ideas_followups.csv into Import / export on the board (signed in). Send the other files (lmc_gear_notes.md, lmc_subscriptions.csv, lmc_contacts.csv, lmc_studio.md, lmc_ecosystem_summary.md) to Work Official.\n\n'
+  +'OPEN ITEMS STILL NEEDED FROM LMC: logo/brand assets (Leo), PeerSpace front-studio layout link + remodel notes (Jen), the seven extraction files (Jen), Cheqroom export (Jen), subscription pull (Kemp).\n\n'
+  +(GUIDE_DOC?'WRITTEN ONBOARDING DOC:\n'+GUIDE_DOC+'\n\n':'')
+  +boardSummary();
+}
+var chatHist=[];
+function gemMsg(role,text,wait){var d=document.createElement('div');d.className='msg '+(role==='user'?'u':'g')+(wait?' wait':'');d.textContent=text;$('chat').appendChild(d);$('chat').scrollTop=1e9;return d;}
+function gemSend(text){
+  var key=getGem(); if(!key||!text)return;
+  gemMsg('user',text); chatHist.push({role:'user',parts:[{text:text}]});
+  var w=gemMsg('model','Thinking…',true); $('gemSend').disabled=true;
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(key),{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemInstruction:{parts:[{text:systemPrompt()}]},contents:chatHist,generationConfig:{temperature:0.4,maxOutputTokens:1200}})
+  }).then(function(r){return r.json();}).then(function(j){
+    if(j.error)throw new Error(j.error.message||'Gemini error');
+    var out=(j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts||[]).map(function(p){return p.text||'';}).join('').trim()||'(no answer)';
+    w.textContent=out; w.classList.remove('wait'); chatHist.push({role:'model',parts:[{text:out}]});
+  }).catch(function(e){w.textContent='Gemini could not answer: '+e.message+(/API key/i.test(e.message)?' — check the key, or Disconnect and paste a new one.':'');w.classList.remove('wait');chatHist.pop();})
+  .finally(function(){$('gemSend').disabled=false;$('gemIn').focus();});
+}
+var CHIPS=['Get me set up','What should I do first?','How do I run the extraction prompts?','What is on my plate right now?','How does sign-in work?'];
+function renderGem(){
+  var on=!!getGem(); $('gemSetup').hidden=on; $('gemChatWrap').hidden=!on;
+  if(on){ $('chips').innerHTML=CHIPS.map(function(c){return '<button class="btn sm" data-chip="'+esc(c)+'">'+esc(c)+'</button>';}).join('');
+    if(!chatHist.length&&!$('chat').children.length)gemMsg('model','Hi'+(S.me?' '+S.me:'')+' — I\'m the LMC COMMAND guide. I can get you signed in, walk you through the extraction files, or tell you what\'s on your plate. Where do you want to start?'); }
+}
+$('gemSave').addEventListener('click',function(){var k=$('gemKey').value.trim();if(!k)return;setGem(k);$('gemKey').value='';renderGem();toast('Gemini connected on this device');});
+$('gemKey').addEventListener('keydown',function(e){if(e.key==='Enter')$('gemSave').click();});
+$('gemForget').addEventListener('click',function(){setGem('');chatHist=[];$('chat').innerHTML='';renderGem();});
+$('gemSend').addEventListener('click',function(){var t=$('gemIn').value.trim();$('gemIn').value='';gemSend(t);});
+$('gemIn').addEventListener('keydown',function(e){if(e.key==='Enter')$('gemSend').click();});
+$('chips').addEventListener('click',function(e){var b=e.target.closest('[data-chip]');if(b)gemSend(b.dataset.chip);});
+$('gemCopy').addEventListener('click',function(){
+  var p=systemPrompt()+'\n\nStart by greeting me and asking what I want to do first.';
+  (navigator.clipboard?navigator.clipboard.writeText(p):Promise.reject()).then(function(){toast('Guide prompt copied — paste it into Gemini');window.open('https://gemini.google.com/app','_blank','noopener');}).catch(function(){prompt('Copy this and paste it into Gemini:',p);});
+});
+
+/* ================= tabs / boot ================= */
+var tabs=document.querySelectorAll('nav.tabs button'), panels=document.querySelectorAll('.panel');
+function go(p){tabs.forEach(function(x){x.setAttribute('aria-selected',x.dataset.p===p?'true':'false');});panels.forEach(function(x){x.classList.toggle('on',x.id===p);});if(p==='inbox')setTimeout(function(){$('capText').focus();},50);if(p==='guide')renderGem();history.replaceState(null,'','#'+p);}
+tabs.forEach(function(t){t.addEventListener('click',function(){go(t.dataset.p);});});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-go]');if(b)go(b.dataset.go);});
+loadLocal(); renderAll();
+$('capWho').value=S.me||'Leo'; $('atOwner').value=S.me||'Leo';
+if(location.hash&&document.querySelector('nav.tabs button[data-p="'+location.hash.slice(1)+'"]'))go(location.hash.slice(1));
+fetch('docs/JEN_ONBOARDING.md?t='+Date.now()).then(function(r){return r.ok?r.text():'';}).then(function(t){GUIDE_DOC=t;}).catch(function(){});
+whoami().then(refresh).catch(function(){});
+setInterval(function(){if(document.visibilityState==='visible'&&getTok())refresh().catch(function(){});},60000);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&getTok())refresh().catch(function(){});});
+</script>
+</body>
+</html>

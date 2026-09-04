@@ -1,0 +1,16 @@
+project,task,category,status,owner,due_or_timeframe,priority,blocked_by,next_action,notes,source_file
+LMC COMMAND,Run the seven extraction prompts in the shared ChatGPT thread,admin,in_progress,Jen,this week,high,,Drop prompt 0 then 1-7 in order; save each output under the named filename,Outputs become the seed data for the board,2026-09-04 call
+LMC COMMAND,Send logo / brand assets for the command center,admin,waiting,Leo,this week,medium,,Drop the files in the shared thread,Needed to brand the hub and board,2026-09-04 call
+LMC COMMAND,Send PeerSpace front-studio layout link + remodel notes,studio buildout,waiting,Jen,this week,medium,,Paste the listing link and note what changed since the photos,Feeds the Studio & Spaces module,2026-09-04 call
+LMC COMMAND,Export the current Cheqroom catalog,gear,not_started,Jen,when ready,medium,,Export all SKUs with kit membership and quantities,Starting catalog for Gear & Inventory,2026-09-04 call
+LMC COMMAND,Pull the full subscription list,admin,not_started,Kemp,this week,medium,,List every paid tool with cost and who uses it,Seeds the Subscription Ledger and the first cut list,2026-09-04 call
+LMC COMMAND,Stand up Task & Project Command + Idea Inbox from seed files,admin,in_progress,Work Official,on receipt of files,high,Run the seven extraction prompts in the shared ChatGPT thread,Ingest lmc_projects_tasks.csv and lmc_ideas_followups.csv,First milestone step 1,2026-09-04 call
+LMC COMMAND,Import Cheqroom export with piece-level check-in/out,gear,not_started,Work Official,after catalog export,high,Export the current Cheqroom catalog,Map SKUs to kits; add untracked small grip with in-house QR labels,First milestone step 2 - goal is to retire Cheqroom at parity,2026-09-04 call
+Hardware upgrade,Replace the M1 / 8GB / 2020 Mac with an M4-class machine,gear,not_started,Leo,UNKNOWN,high,,Best-practice computers conversation,Current Mac cannot carry editing plus the command center,2026-09-04 call
+Hardware upgrade,Bring the AMD Ryzen AI Max+ 395 (128GB) node online as the render/AI box,gear,not_started,Work Official,UNKNOWN,high,,Install ComfyUI + LTX 2.3 + local LLM per CREATIVE_PIPELINE.md,Owned node that replaces the recurring AI bill,2026-09-04 call
+Gear & Inventory,Add untracked small grip to inventory (C-stands, arms, knuckles, cardellinis),gear,not_started,Jen,after Cheqroom export,high,,Count and label every piece with an in-house QR,Roughly $100 each and currently walking away,2026-09-04 call
+Subscription consolidation,Produce the first keep / cut / review list,admin,not_started,Work Official,after Kemp's pull,medium,Pull the full subscription list,Score each tool against a local or owned alternative,LMC is anti-subscription; owning tools is the goal,2026-09-04 call
+Studio buildout,Front studio remodel,construction,in_progress,Leo,UNKNOWN,UNKNOWN,,UNKNOWN,Details arrive with lmc_studio.md,2026-09-04 call
+Cabinetry,Cabinetry review,cabinetry,in_progress,Leo,UNKNOWN,UNKNOWN,,UNKNOWN,Details arrive with lmc_projects_tasks.csv,2026-09-04 call
+Lighting,Lighting review,lighting,in_progress,Leo,UNKNOWN,UNKNOWN,,UNKNOWN,Details arrive with lmc_projects_tasks.csv,2026-09-04 call
+TV show,TV show production,TV show,in_progress,Leo,UNKNOWN,UNKNOWN,,UNKNOWN,Details arrive with lmc_projects_tasks.csv,2026-09-04 call

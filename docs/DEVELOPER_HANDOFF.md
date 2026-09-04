@@ -122,6 +122,9 @@ source or any public page.
 - **Cadence:** on-the-fly, text-based, fast turnaround. No 24-hour waits.
 - **Shared build thread:** you're starting a shared chat we build from; we'll work
   against the seed files it produces.
+- **Your login:** the board (`command.html`) is live. Sign in with your own GitHub
+  account; Work Official (`borngifted`) is owner/admin and grants access. Steps in
+  `JEN_ONBOARDING.md`; the board's **Guide** tab (Gemini) walks you through it.
 
 ## 8. Open items / what we still need from you
 
@@ -130,10 +133,12 @@ source or any public page.
 - [ ] The seven extraction files (`EXTRACTION_PROMPTS.md`)
 - [ ] Cheqroom export (current gear catalog) when ready
 - [ ] Kemp's subscription pull
+- [ ] Jen's GitHub username (so we can add her as a collaborator)
 
 ## 9. First milestone
 
-1. Ingest seed files → stand up **Task & Project Command** + **Idea Inbox**.
+1. ~~Stand up **Task & Project Command** + **Idea Inbox**~~ — live at `command.html`,
+   reading the seed-file schemas. Ingest Jen's real files when they land.
 2. Import Cheqroom export → **Gear & Inventory** with piece-level check-in/out.
 3. Populate **Subscription Ledger** → produce the first consolidation/cut list.
 4. Review together, then graduate to watchers/agents (follow-up, subscription,
