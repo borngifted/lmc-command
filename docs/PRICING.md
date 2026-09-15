@@ -11,7 +11,12 @@ it current and running. You stop renting the engine and start owning it.
 
 ---
 
-## Part 0 — Hardware (billed at cost, exact)
+## Part 0 — The new environment: Windows render node + studio Mac (at cost)
+
+This is a fresh build, not an upgrade of the studio's current computer: one new
+Windows machine to render and run the AI stack, one new Mac to edit and run the
+hub. Nothing from the current setup carries over except project files and the
+Cheqroom export.
 
 Prices verified **2026-09-04** on the makers' stores and current trade press. Two
 things changed since the call: Apple refreshed the Mac mini and Mac Studio (M6 /
@@ -20,7 +25,7 @@ minimum; and the memory-price spike pushed every 128GB Ryzen AI Max machine up
 $400–$1,400 from launch. Stock on the 128GB Ryzen boxes comes and goes — buy when
 the chosen one is in stock.
 
-### A. The render / AI node — AMD Ryzen AI Max+ 395 · 128GB unified
+### A. Windows — the render / AI node · AMD Ryzen AI Max+ 395 · 128GB unified
 
 | Machine | Config | Price | Notes |
 | --- | --- | ---: | --- |
@@ -29,7 +34,7 @@ the chosen one is in stock.
 | Framework Desktop *(repairable / own it)* | 128GB system $3,449 + 1TB SSD $215 + Windows 11 Pro $199 + cable $5 | **$3,868** | Standard parts, upgradable, best "own the machine" story. Pre-order only. |
 | HP Z2 Mini G1a *(enterprise)* | 128GB · 2TB · Windows 11 Pro · 3-yr on-site | **$3,342.65** (B&H) · $4,781 list | Business warranty; ISV certs. Pro 395 chip, same silicon. |
 
-### B. The studio Mac — edit, color, sound, the hub, agent orchestration
+### B. Mac — the studio machine · edit, color, sound, the hub, agent orchestration
 
 | Machine | Config | Price | Notes |
 | --- | --- | ---: | --- |
@@ -39,21 +44,35 @@ the chosen one is in stock.
 
 Apple storage upgrades are configured at checkout (apple.com); prices above are
 Apple's list at the memory tiers shown. Previous-gen M4 Pro Mac minis are refurb /
-secondary-market only now.
+secondary-market only now. The studio's current M1 / 8GB / 2020 Mac is retired,
+not reused — this is a new machine.
 
 ### C. Bundles (the number for the "best-practice computers" talk)
 
-| Bundle | Render node | Studio Mac | Hardware total | + provisioning |
+| Bundle | Windows render node | Studio Mac | Hardware total | + provisioning |
 | --- | --- | --- | ---: | ---: |
 | **Recommended** | Corsair AI Workstation 300, 128GB | Mac mini M5 Pro 48GB | **$4,998** | $6,198 |
 | Budget | GMKtec EVO-X2, 128GB (when in stock) | Mac mini M5 Pro 24GB ($1,699) | **$3,899** | $5,099 |
 | Headroom | Framework Desktop, 128GB (full build) | Mac Studio M5 Max 64GB | **$6,767** | $7,967 |
 
-Provisioning is the $1,200 line below (OS, drivers, ROCm/LTX 2.3, ComfyUI, local
-LLM, Blender + TRIPOINT, mocap, LAN between the two machines, backups). Hardware
-is purchased in LMC's name, at cost, no markup. Not included and optional: a
+Provisioning is the $1,200 line below: both new machines from a clean install
+(the Mac and Windows setup in D), the LAN between them, backups. Hardware is
+purchased in LMC's name, at cost, no markup. Not included and optional: a
 2.5/10GbE switch to link the two machines, a UPS, external storage — quoted on
-request. **If LMC already owns the Ryzen node, drop column one.**
+request.
+
+### D. What gets installed — the Mac and Windows setup, from a clean install
+
+Both machines arrive new and are built from zero. Each has a single job, wired
+together over the studio LAN.
+
+| Windows · render / AI node | Mac · studio machine |
+| --- | --- |
+| Windows 11 Pro, clean install · AMD drivers + ROCm for the Radeon iGPU | macOS, clean setup · LMC's editing, color and sound apps on LMC's existing licenses |
+| LTX 2.3 video generation · ComfyUI with LMC's workflows loaded | LMC COMMAND hub + board, team accounts signed in |
+| Local LLM served from the 128GB unified pool — the everyday model, no cloud tokens | Claude Code + MCP agent orchestration — keys in env, never in source |
+| Blender + TRIPOINT · markerless mocap | Wired LAN link to the render node · submits jobs, pulls renders back |
+| Shared render / output folder on the LAN · nightly backup | Time Machine + off-site backup |
 
 ---
 
@@ -68,7 +87,7 @@ request. **If LMC already owns the Ryzen node, drop column one.**
 **À la carte add-ons**
 | Item | Price |
 | --- | ---: |
-| Hardware provisioning & tuning — Ryzen AI Max 395 128GB node + studio Mac, LAN, backups | $1,200 + hardware at cost (Part 0) |
+| Hardware provisioning & tuning — the Windows render node + the studio Mac, both from clean install (Part 0 D), LAN, backups | $1,200 + hardware at cost (Part 0) |
 | Each additional custom agent | $900 |
 | Custom-trained LoRA / brand model | $650 |
 | Data / knowledge migration from existing tools | $1,500 |

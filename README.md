@@ -62,13 +62,15 @@ board change is a commit under the person's username.
 
 ## The stack
 
-Two-machine studio. The render node is the part that changes the economics:
+A new two-machine environment, built from scratch — both machines new, nothing
+from the current computer reused. The render node is the part that changes the
+economics:
 
-- **Render node** — AMD Ryzen AI Max+ 395, 128GB unified memory. Runs LTX 2.3
+- **Render node (Windows)** — AMD Ryzen AI Max+ 395, 128GB unified memory. Runs LTX 2.3
   video on the Radeon iGPU, a local LLM in the unified memory pool, ComfyUI,
   Blender + TRIPOINT, and markerless mocap. The everyday model cost moves here,
-  once — it "killed the $200/month AI bill."
-- **Studio** — Mac / workstation for editing, color, sound, the LMC COMMAND hub
+  once — the $200/month AI bill goes away.
+- **Studio (Mac)** — Mac mini M5 Pro for editing, color, sound, the LMC COMMAND hub
   and agent orchestration (Claude Code + MCP).
 
 Cloud tools (SkyReels, frontier models) stay in the kit for burst hero shots,
