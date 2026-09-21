@@ -38,7 +38,7 @@ const QUESTIONS = {
     instructions: 'Which agent should handle this studio task',
     criteria: {
       claude_code:
-        'Hands-on work on the studio machines: writing or editing code and files in a repo, running commands, debugging, updating the LMC COMMAND board or its data, multi-step agent work that uses MCP tools',
+        'Hands-on work on the studio machines: reading or inspecting local files, writing or editing code and files in a repo, running commands, debugging, updating the LMC COMMAND board or its data, multi-step agent work that uses MCP tools',
       chatgpt:
         'Conversation-only work that needs no access to local files: drafting emails or copy, brainstorming, summarizing, answering questions, running the extraction prompts over project notes',
     },
