@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LMC COMMAND · JEV Router</title>
+<meta name="theme-color" content="#0b1220">
+<style>
+:root{--bg:#0b1220;--panel:#111c30;--panel2:#16243c;--line:#24344f;--ink:#eaf1fb;--muted:#93a6c4;--accent:#4c8dff;--mint:#37e0b0;--bad:#ff6b6b;--mono:ui-monospace,"SF Mono",Menlo,monospace;--f:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f)}.wrap{max-width:980px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.ey{font:11px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}h1{margin:8px 0;font-size:clamp(26px,5vw,44px)}p{color:var(--muted)}a{color:var(--accent)}.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin:16px 0}.status{display:flex;gap:9px;align-items:center;font:12px var(--mono)}.dot{width:10px;height:10px;border-radius:50%;background:var(--bad)}.dot.on{background:var(--mint);box-shadow:0 0 12px var(--mint)}textarea{width:100%;min-height:170px;resize:vertical;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:14px;font:14px/1.5 var(--mono)}select,button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:10px 12px;font-weight:700}button{cursor:pointer;background:var(--accent);border-color:var(--accent)}button:disabled{opacity:.5}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.out{white-space:pre-wrap;min-height:100px;background:#08101d;border:1px solid var(--line);border-radius:8px;padding:14px;font:13px/1.5 var(--mono);overflow:auto}.pill{font:11px var(--mono);border:1px solid var(--line);padding:4px 8px;border-radius:999px;color:var(--muted)}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div><div class="ey">LMC COMMAND · JEV</div><h1>AI Router</h1></div><div><a href="command.html">Board</a> · <a href="index.html">Hub</a></div></div>
+<p>Routes LMC work to Claude Code or OpenAI through the local JEV bridge. Secrets and CLI authentication stay on the studio machine.</p>
+<div class="card">
+  <div class="status"><span class="dot" id="dot"></span><span id="health">Checking local bridge…</span><span class="pill" id="routeState">AUTO</span></div>
+</div>
+<div class="card">
+  <textarea id="prompt" placeholder="What should LMC do? Example: Inspect the repo and add a JEV status panel, then run tests."></textarea>
+  <div class="row">
+    <select id="agent"><option value="auto">Auto · JEV decides</option><option value="claude">Claude Code</option><option value="openai">OpenAI / Codex</option></select>
+    <button id="run">Route + Run</button>
+    <button id="route" style="background:var(--panel2)">Route only</button>
+  </div>
+</div>
+<div class="card"><div class="ey">Result</div><div id="meta" style="margin:8px 0;color:var(--mint);font:12px var(--mono)"></div><div class="out" id="out">Ready.</div></div>
+<p>Bridge default: <code>http://127.0.0.1:4317</code>. Start it from <code>bridge/</code> with <code>npm start</code>.</p>
+</div>
+<script>
+const BASE=localStorage.getItem("lmc_jev_bridge")||"http://127.0.0.1:4317";
+const $=id=>document.getElementById(id);
+async function health(){
+ try{const r=await fetch(BASE+"/health");const j=await r.json();$("dot").classList.toggle("on",!!j.ok);$("health").textContent=j.ok?"JEV bridge online · "+j.workspace:"Bridge unavailable";}
+ catch(e){$("health").textContent="Bridge offline · start bridge/npm start";}
+}
+async function call(path,execute){
+ const prompt=$("prompt").value.trim(); if(!prompt)return;
+ $("run").disabled=$("route").disabled=true;$("out").textContent=execute?"Running…":"Routing…";$("meta").textContent="";
+ try{
+   const r=await fetch(BASE+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,agent:$("agent").value})});
+   const j=await r.json();$("meta").textContent="Agent: "+(j.agent||"unknown");
+   $("routeState").textContent=(j.agent||$("agent").value).toUpperCase();
+   $("out").textContent=execute?(j.output||j.error||"No output"):JSON.stringify(j,null,2);
+ }catch(e){$("out").textContent="Could not reach local JEV bridge. "+e.message}
+ finally{$("run").disabled=$("route").disabled=false}
+}
+$("run").onclick=()=>call("/execute",true);$("route").onclick=()=>call("/route",false);health();setInterval(health,15000);
+</script></body></html>
