@@ -1,0 +1,13 @@
+{
+  "name": "lmc-jev-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "doctor": "node doctor.mjs"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}
