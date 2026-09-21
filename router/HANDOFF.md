@@ -89,8 +89,14 @@ Exit codes: 0 ok / dry run, 1 error, 2 no task given, 3 held for a person.
 - `Jev request failed: 401` — wrong or revoked key; create a new one in the console.
 - `process.loadEnvFile is not a function` — Node is older than 20.12.
 - `spawn claude ENOENT` / `spawn codex ENOENT` — that CLI is not on PATH.
-  On Windows the CLIs are `.cmd` shims: add `shell: true` to the `spawn` options
-  in `run()` in `route.mjs`.
+  (Windows `.cmd` shims are handled: the script spawns through a shell on
+  Windows and pipes the task on stdin, so task text never touches the shell.)
+- Windows PowerShell: `claude.ps1 cannot be loaded because running scripts is
+  disabled` — PowerShell's execution policy is blocking the npm `.ps1` shim. Run
+  `claude.cmd` (and `codex.cmd`) instead, or use Command Prompt. The router is
+  not affected; it never goes through PowerShell.
+- Codex: `The '<model>' model requires a newer version of Codex` — upgrade the
+  Codex CLI (`npm install -g @openai/codex@latest` or `brew upgrade codex`).
 - Routing feels wrong for a kind of task — edit the option descriptions in
   `QUESTIONS` at the top of `route.mjs`; try wording in the Playground first.
 
@@ -135,9 +141,11 @@ const MIN_CONFIDENCE = Number(process.env.ROUTER_MIN_CONFIDENCE || 0.5);
 const FALLBACK = process.env.ROUTER_FALLBACK || 'ask';
 const WORKDIR = resolve(process.env.ROUTER_WORKDIR || join(HERE, '..'));
 
+// The task text is piped to the agent on stdin, never passed as an argument, so the
+// fixed args below are safe to run through a shell (needed for Windows .cmd shims).
 const HANDLERS = {
-  claude_code: { label: 'Claude Code', cmd: 'claude', args: (task) => ['-p', task] },
-  chatgpt: { label: 'ChatGPT (Codex CLI)', cmd: 'codex', args: (task) => ['exec', task] },
+  claude_code: { label: 'Claude Code', cmd: 'claude', args: ['-p'] },
+  chatgpt: { label: 'ChatGPT (Codex CLI)', cmd: 'codex', args: ['exec', '-'] },
 };
 
 const QUESTIONS = {
@@ -194,9 +202,15 @@ function pick(answers) {
 
 function run(handler, task) {
   return new Promise((done, fail) => {
-    const p = spawn(handler.cmd, handler.args(task), { cwd: WORKDIR, stdio: 'inherit' });
+    const p = spawn(handler.cmd, handler.args, {
+      cwd: WORKDIR,
+      stdio: ['pipe', 'inherit', 'inherit'],
+      shell: process.platform === 'win32',
+    });
     p.on('error', fail);
     p.on('exit', (code) => done(code ?? 1));
+    p.stdin.on('error', () => {}); // agent exited before reading; the exit code reports it
+    p.stdin.end(task);
   });
 }
 

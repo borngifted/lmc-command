@@ -25,9 +25,11 @@ const MIN_CONFIDENCE = Number(process.env.ROUTER_MIN_CONFIDENCE || 0.5);
 const FALLBACK = process.env.ROUTER_FALLBACK || 'ask';
 const WORKDIR = resolve(process.env.ROUTER_WORKDIR || join(HERE, '..'));
 
+// The task text is piped to the agent on stdin, never passed as an argument, so the
+// fixed args below are safe to run through a shell (needed for Windows .cmd shims).
 const HANDLERS = {
-  claude_code: { label: 'Claude Code', cmd: 'claude', args: (task) => ['-p', task] },
-  chatgpt: { label: 'ChatGPT (Codex CLI)', cmd: 'codex', args: (task) => ['exec', task] },
+  claude_code: { label: 'Claude Code', cmd: 'claude', args: ['-p'] },
+  chatgpt: { label: 'ChatGPT (Codex CLI)', cmd: 'codex', args: ['exec', '-'] },
 };
 
 const QUESTIONS = {
@@ -84,9 +86,15 @@ function pick(answers) {
 
 function run(handler, task) {
   return new Promise((done, fail) => {
-    const p = spawn(handler.cmd, handler.args(task), { cwd: WORKDIR, stdio: 'inherit' });
+    const p = spawn(handler.cmd, handler.args, {
+      cwd: WORKDIR,
+      stdio: ['pipe', 'inherit', 'inherit'],
+      shell: process.platform === 'win32',
+    });
     p.on('error', fail);
     p.on('exit', (code) => done(code ?? 1));
+    p.stdin.on('error', () => {}); // agent exited before reading; the exit code reports it
+    p.stdin.end(task);
   });
 }
 
