@@ -99,3 +99,95 @@ For a simple first deployment, use a LaunchAgent or another process supervisor t
 ## Browser note
 
 The JEV page is a static control surface. Actual execution remains local. If a browser blocks HTTPS-to-loopback requests in your environment, use the existing browser-extension bridge or serve the LMC UI locally; do not expose this bridge publicly just to bypass browser policy.
+
+
+## Board + Idea Inbox integration
+
+The Task Board and Idea Inbox are now the primary JEV control surface.
+
+### Task flow
+
+```
+Task row
+  -> Send to AI
+  -> POST http://127.0.0.1:4317/execute
+  -> JEV chooses Claude or OpenAI
+  -> jev-claude / jev-codex executes
+  -> result is written back into that task's override
+  -> AI activity entry is appended to data/board.json
+```
+
+Each task stores the latest execution fields:
+
+- `ai_last_at`
+- `ai_last_agent`
+- `ai_last_output`
+- `ai_last_status`
+
+The UI renders the latest result directly below the task.
+
+### Idea flow
+
+Idea Inbox items have the same **Send to AI** control. JEV receives the idea type,
+owner, related project, urgency and notes, then routes it to the appropriate
+executor. The result is rendered directly below the idea and recorded in the same
+activity ledger.
+
+### Activity ledger
+
+Shared signed-in executions append records to:
+
+```
+data/board.json -> ai_activity[]
+```
+
+Each activity record contains:
+
+- timestamp
+- board user
+- task/idea type
+- stable item key
+- human-readable label
+- selected agent
+- completion/failure status
+- bounded output excerpt
+
+The existing **Import / export -> Recent changes** section displays the latest AI
+activity before the normal board change log.
+
+Signed-out executions stay local to that browser in `lmc_command_v2` localStorage
+until the user signs in. The actual AI credentials never enter browser storage.
+
+### Required runtime
+
+The board can be hosted on GitHub Pages, but execution requires the local bridge:
+
+```bash
+cd /path/to/lmc-command/bridge
+export LMC_WORKSPACE="/path/to/lmc-command"
+npm run doctor
+npm start
+```
+
+Keep that terminal/process running while using **Send to AI**.
+
+### Troubleshooting
+
+**Button says JEV routing and then fails**
+
+1. Open `http://127.0.0.1:4317/health` locally.
+2. Run `npm run doctor` in `bridge/`.
+3. Verify `jev`, `jev-claude`, `jev-codex`, `claude`, and `codex` are on PATH.
+4. Verify the configured JEV key/environment is available to the bridge process.
+5. Verify `LMC_WORKSPACE` points at the actual LMC checkout.
+
+**Result appears locally but not for the team**
+
+Sign in to the LMC board with a write-enabled account. Shared AI results and
+activity are stored through the same GitHub-backed `data/board.json` mechanism
+as normal task status changes.
+
+**Browser cannot reach localhost**
+
+Use the existing browser-extension/local bridge path or serve LMC locally. Do not
+make the JEV execution bridge public just to work around browser security policy.
