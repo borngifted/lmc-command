@@ -96,7 +96,9 @@ Exit codes: 0 ok / dry run, 1 error, 2 no task given, 3 held for a person.
   `claude.cmd` (and `codex.cmd`) instead, or use Command Prompt. The router is
   not affected; it never goes through PowerShell.
 - Codex: `The '<model>' model requires a newer version of Codex` — upgrade the
-  Codex CLI (`npm install -g @openai/codex@latest` or `brew upgrade codex`).
+  Codex CLI: `npm install -g @openai/codex@latest`, or on a Mac
+  `brew install --cask codex` (the old `codex` formula stops at 0.39.0; remove it
+  and any stale npm copy at `/opt/homebrew/bin/codex` first).
 - Routing feels wrong for a kind of task — edit the option descriptions in
   `QUESTIONS` at the top of `route.mjs`; try wording in the Playground first.
 
