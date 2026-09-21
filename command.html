@@ -106,6 +106,14 @@ select{appearance:none;padding-right:28px;background-image:linear-gradient(45deg
 .idea .meta{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
 .idea .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .idea select{font-size:12px;padding:4px 24px 4px 8px}
+.ai-btn{border-color:var(--accent2)!important;color:var(--accent2)!important}
+.ai-btn.running{opacity:.65;cursor:wait}
+.ai-result{grid-column:2/-1;background:#08101d;border:1px solid var(--line);border-radius:7px;padding:10px 12px;margin-top:7px;font:12px/1.5 var(--mono);color:var(--muted);white-space:pre-wrap;max-height:220px;overflow:auto}
+.idea .ai-result{grid-column:1/-1}
+.ai-result b{color:var(--accent2);font-weight:700}
+.ai-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.ai-meta .pill{font-size:9px}
+.ai-log-card{margin-top:18px}
 .drop{display:block;border:1px dashed var(--line);border-radius:8px;padding:22px;text-align:center;color:var(--muted);background:var(--panel2);transition:all .15s;cursor:pointer}
 .drop.over{border-color:var(--accent2);background:rgba(55,224,176,.06)}
 .drop b{color:var(--ink)}
@@ -389,8 +397,8 @@ function kIdea(i){return 'i:'+String(i.item).toLowerCase();}
 
 /* ================= state ================= */
 /* seed = repo CSVs; shared = data/board.json (repo, everyone); local = this device only (signed out) */
-var S={seed:{tasks:[],ideas:[]}, shared:{overrides:{},tasks:[],ideas:[],log:[],sources:{}}, sharedSha:null,
-       local:{overrides:{},tasks:[],ideas:[],sources:{}}, me:'', auth:null};
+var S={seed:{tasks:[],ideas:[]}, shared:{overrides:{},tasks:[],ideas:[],log:[],sources:{},ai_activity:[]}, sharedSha:null,
+       local:{overrides:{},tasks:[],ideas:[],sources:{},ai_activity:[]}, me:'', auth:null};
 var LS='lmc_command_v2';
 function loadLocal(){try{var j=JSON.parse(localStorage.getItem(LS));if(j){S.local=Object.assign(S.local,j.local||{});S.me=j.me||'';}}catch(e){}}
 function saveLocal(){try{localStorage.setItem(LS,JSON.stringify({local:S.local,me:S.me}));}catch(e){}}
@@ -438,8 +446,8 @@ function writeRepoFile(path,text,msg,sha){
 function commitBoard(msg,mutate,attempt){
   attempt=attempt||0;
   return readRepoFile(BOARD).then(function(f){
-    var doc=f.text?JSON.parse(f.text):{overrides:{},tasks:[],ideas:[],log:[],sources:{}};
-    doc.overrides=doc.overrides||{};doc.tasks=doc.tasks||[];doc.ideas=doc.ideas||[];doc.log=doc.log||[];doc.sources=doc.sources||{};
+    var doc=f.text?JSON.parse(f.text):{overrides:{},tasks:[],ideas:[],log:[],sources:{},ai_activity:[]};
+    doc.overrides=doc.overrides||{};doc.tasks=doc.tasks||[];doc.ideas=doc.ideas||[];doc.log=doc.log||[];doc.sources=doc.sources||{};doc.ai_activity=doc.ai_activity||[];
     mutate(doc);
     doc.updated=now(); doc.by=S.auth.login;
     doc.log.unshift({at:doc.updated,by:S.auth.login,what:msg}); doc.log=doc.log.slice(0,200);
@@ -455,7 +463,7 @@ function refresh(){
   var tok=getTok();
   return Promise.all([readRepoFile(SEEDS.tasks),readRepoFile(SEEDS.ideas),readRepoFile(BOARD)]).then(function(r){
     S.seed.tasks=parseCSV(r[0].text); S.seed.ideas=parseCSV(r[1].text);
-    if(r[2].text){try{S.shared=Object.assign({overrides:{},tasks:[],ideas:[],log:[],sources:{}},JSON.parse(r[2].text));}catch(e){}}
+    if(r[2].text){try{S.shared=Object.assign({overrides:{},tasks:[],ideas:[],log:[],sources:{},ai_activity:[]},JSON.parse(r[2].text));}catch(e){}}
     S.sharedSha=r[2].sha; renderAll();
   });
 }
@@ -528,7 +536,7 @@ function whoami(){
         return commitBoard('synced '+n+' change'+(n>1?'s':'')+" from "+S.auth.login+"'s device",function(d){
           Object.keys(L.overrides).forEach(function(k){d.overrides[k]=Object.assign({},d.overrides[k],L.overrides[k]);});
           d.tasks=L.tasks.concat(d.tasks); d.ideas=L.ideas.concat(d.ideas);
-        }).then(function(){S.local={overrides:{},tasks:[],ideas:[],sources:{}};saveLocal();toast('Synced your local changes to the team board');});
+        }).then(function(){S.local={overrides:{},tasks:[],ideas:[],sources:{},ai_activity:[]};saveLocal();toast('Synced your local changes to the team board');});
       }
     });
   }).catch(function(e){
@@ -643,6 +651,77 @@ function addIdea(i){
   S.local.ideas.unshift(i); saveLocal(); renderAll(); return Promise.resolve();
 }
 
+/* ================= JEV AI execution ================= */
+var JEV_BASE=(function(){try{return localStorage.getItem('lmc_jev_bridge')||'http://127.0.0.1:4317';}catch(e){return 'http://127.0.0.1:4317';}})();
+function aiPrompt(kind,item){
+  if(kind==='task'){
+    return [
+      'You are executing a task from LMC COMMAND.',
+      'Project: '+U(item.project),
+      'Task: '+U(item.task),
+      'Owner: '+U(item.owner),
+      'Status: '+U(item.status),
+      'Priority: '+U(item.priority),
+      'Next action: '+U(item.next_action),
+      'Notes: '+U(item.notes),
+      '',
+      'Complete the task as far as your available tools allow. If this requires repository work, inspect the existing LMC repository before editing. Return a concise execution report with work completed, files/actions changed, verification performed, and any unresolved items.'
+    ].join('\n');
+  }
+  return [
+    'You are processing an item from the LMC COMMAND Idea Inbox.',
+    'Type: '+U(item.type),
+    'Idea: '+U(item.item),
+    'Owner: '+U(item.who_owns_it),
+    'Related project: '+U(item.related_project),
+    'Urgency: '+U(item.time_sensitivity),
+    'Notes: '+U(item.notes),
+    '',
+    'Turn this idea into the most useful concrete next result. If it is actionable, produce the deliverable or implementation needed. If it requires repository work, inspect the LMC repository before editing. Return a concise execution report and a recommended next action.'
+  ].join('\n');
+}
+function callJevExecute(kind,item){
+  return fetch(JEV_BASE+'/execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    prompt:aiPrompt(kind,item),agent:'auto',
+    context:{source:'lmc-command',kind:kind,key:item._k}
+  })}).then(function(r){return r.json().then(function(j){if(!r.ok||!j.ok){var e=new Error(j.error||('HTTP '+r.status));e.payload=j;throw e;}return j;});});
+}
+function recordAiResult(kind,item,result){
+  var at=now(), agent=result.agent||'unknown', out=(result.output||'').trim()||'(completed with no textual output)';
+  var patch={ai_last_at:at,ai_last_agent:agent,ai_last_output:out,ai_last_status:'completed'};
+  var label=kind==='task'?item.task:item.item.slice(0,60);
+  var activity={at:at,by:S.auth?S.auth.login:(S.me||'local'),kind:kind,key:item._k,label:label,agent:agent,status:'completed',output:out.slice(0,4000)};
+  if(signedIn())return commitBoard('AI completed '+kind+' "'+label+'" via '+agent,function(d){
+    d.overrides[item._k]=Object.assign({},d.overrides[item._k],patch);
+    d.ai_activity=d.ai_activity||[];d.ai_activity.unshift(activity);d.ai_activity=d.ai_activity.slice(0,200);
+  });
+  S.local.overrides[item._k]=Object.assign({},S.local.overrides[item._k],patch);
+  S.local.ai_activity=S.local.ai_activity||[];S.local.ai_activity.unshift(activity);S.local.ai_activity=S.local.ai_activity.slice(0,100);
+  saveLocal();renderAll();return Promise.resolve();
+}
+function recordAiFailure(kind,item,error){
+  var at=now(), msg=error&&error.message?error.message:String(error);
+  var patch={ai_last_at:at,ai_last_agent:'',ai_last_output:'AI execution failed: '+msg,ai_last_status:'failed'};
+  var label=kind==='task'?item.task:item.item.slice(0,60);
+  if(signedIn())return commitBoard('AI failed '+kind+' "'+label+'": '+msg.slice(0,120),function(d){
+    d.overrides[item._k]=Object.assign({},d.overrides[item._k],patch);
+    d.ai_activity=d.ai_activity||[];d.ai_activity.unshift({at:at,by:S.auth.login,kind:kind,key:item._k,label:label,agent:'',status:'failed',output:msg.slice(0,1000)});d.ai_activity=d.ai_activity.slice(0,200);
+  }).catch(function(){});
+  S.local.overrides[item._k]=Object.assign({},S.local.overrides[item._k],patch);saveLocal();renderAll();return Promise.resolve();
+}
+function sendItemToAi(kind,k,button){
+  var item=(kind==='task'?allTasks():allIdeas()).find(function(x){return x._k===k;});
+  if(!item)return;
+  var old=button.textContent;button.disabled=true;button.classList.add('running');button.textContent='JEV routing…';
+  toast('Sent to JEV · routing agent');
+  callJevExecute(kind,item).then(function(result){
+    button.textContent='Saving result…';
+    return recordAiResult(kind,item,result).then(function(){toast('AI completed via '+result.agent);});
+  }).catch(function(err){
+    recordAiFailure(kind,item,err);toast('AI failed: '+err.message,true);
+  }).finally(function(){button.disabled=false;button.classList.remove('running');button.textContent=old;});
+}
+
 /* ================= tasks view ================= */
 var F={owner:'',project:'',category:'',status:'',q:'',mine:false};
 function fillSel(sel,vals,keep){var cur=sel.value;sel.innerHTML='<option value="">'+keep+'</option>';vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o);});sel.value=cur;}
@@ -693,14 +772,16 @@ function rowHTML(t){
   if(U(t.notes))n.push(esc(t.notes));
   var sts=['not_started','in_progress','blocked','waiting','done'];
   var sel='<select class="stsel" title="Change status" style="font-size:11px;padding:2px 22px 2px 6px">'+sts.map(function(s){return '<option value="'+s+'"'+(t.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>';}).join('')+(sts.indexOf(t.status)<0?'<option selected>'+esc(U(t.status)||'unknown')+'</option>':'')+'</select>';
+  var ai=t.ai_last_output?'<div class="ai-result"><div class="ai-meta"><span class="pill">AI</span><span class="pill">'+esc(t.ai_last_agent||'')+'</span><span class="pill">'+esc(t.ai_last_at||'')+'</span></div>'+esc(t.ai_last_output)+'</div>':'';
   return '<div class="trow '+(done?'done':'')+(bl&&!done?' blocked-row':'')+'" data-k="'+esc(t._k)+'">'
     +'<span class="tick" role="checkbox" aria-checked="'+done+'" tabindex="0" title="Mark done / reopen">'+(done?'✓':'')+'</span>'
     +'<div><div class="t">'+esc(t.task)+'</div>'+(n.length?'<div class="n">'+n.join(' · ')+'</div>':'')+'</div>'
     +'<div class="side">'+(U(t.owner)?'<span class="pill owner'+(S.me&&t.owner===S.me?' me':'')+'">'+esc(t.owner)+'</span>':'')
     +(U(t.category)?'<span class="pill">'+esc(t.category)+'</span>':'')
-    +(t.priority==='high'?'<span class="pill high">high</span>':'')+sel+'</div></div>';
+    +(t.priority==='high'?'<span class="pill high">high</span>':'')+sel+'<button class="btn sm ai-btn" data-ai="task">Send to AI</button></div>'+ai+'</div>';
 }
 $('board').addEventListener('click',function(e){
+  var ab=e.target.closest('[data-ai=task]'); if(ab){var row=ab.closest('.trow');sendItemToAi('task',row.dataset.k,ab);return;}
   var tk=e.target.closest('.tick'); if(!tk)return;
   var k=tk.closest('.trow').dataset.k, t=allTasks().find(function(x){return x._k===k;}); if(!t)return;
   var ns=t.status==='done'?'in_progress':'done';
@@ -748,8 +829,9 @@ function renderInbox(){
     if(U(i.related_project))meta.push('→ '+esc(i.related_project));
     if(U(i.notes))meta.push(esc(i.notes));
     var opts='<option value="">Triage into project…</option>'+projects.map(function(p){return '<option'+(i.related_project===p?' selected':'')+'>'+esc(p)+'</option>';}).join('');
+    var ai=i.ai_last_output?'<div class="ai-result"><div class="ai-meta"><span class="pill">AI</span><span class="pill">'+esc(i.ai_last_agent||'')+'</span><span class="pill">'+esc(i.ai_last_at||'')+'</span></div>'+esc(i.ai_last_output)+'</div>':'';
     return '<div class="idea '+esc(i.type)+(tr?' triaged':'')+'" data-k="'+esc(i._k)+'"><div><div class="txt">'+esc(i.item)+'</div><div class="meta"><span class="pill">'+esc(U(i.type)||'idea').replace('_',' ')+'</span>'+meta.map(function(m){return '<span>'+m+'</span>';}).join('')+'</div></div>'
-      +'<div class="acts"><select class="triage">'+opts+'</select><button class="btn sm '+(tr?'ghost':'')+'" data-a="toggle">'+(tr?'Reopen':'Done')+'</button></div></div>';
+      +'<div class="acts"><select class="triage">'+opts+'</select><button class="btn sm ai-btn" data-ai="idea">Send to AI</button><button class="btn sm '+(tr?'ghost':'')+'" data-a="toggle">'+(tr?'Reopen':'Done')+'</button></div>'+ai+'</div>';
   }).join('');
 }
 $('inboxList').addEventListener('change',function(e){
@@ -758,6 +840,7 @@ $('inboxList').addEventListener('change',function(e){
   applyOverride(k,{related_project:s.value,status:s.value?'triaged':'open'},(s.value?'triaged "'+i.item.slice(0,40)+'" → '+s.value:'un-triaged "'+i.item.slice(0,40)+'"')).then(function(){if(s.value)toast('Triaged → '+s.value);});
 });
 $('inboxList').addEventListener('click',function(e){
+  var ab=e.target.closest('[data-ai=idea]'); if(ab){var row=ab.closest('.idea');sendItemToAi('idea',row.dataset.k,ab);return;}
   var b=e.target.closest('[data-a=toggle]'); if(!b)return;
   var k=b.closest('.idea').dataset.k, i=allIdeas().find(function(x){return x._k===k;}); if(!i)return;
   var tr=i.status==='triaged'||i.status==='done';
@@ -797,7 +880,7 @@ function exportIdeas(){download('lmc_ideas_followups.csv',toCSV(IDEA_COLS,allIde
 $('iExport').addEventListener('click',exportIdeas); $('iExport2').addEventListener('click',exportIdeas);
 $('reset').addEventListener('click',function(){
   if(!confirm('Forget imports, captures and status changes made on this device while signed out? Shared board data in the repo is untouched.'))return;
-  S.local={overrides:{},tasks:[],ideas:[],sources:{}};saveLocal();renderAll();toast('Local-only changes forgotten');
+  S.local={overrides:{},tasks:[],ideas:[],sources:{},ai_activity:[]};saveLocal();renderAll();toast('Local-only changes forgotten');
 });
 function renderSources(){
   var el=$('srcs'), sh=S.shared.sources||{}, lo=S.local.sources||{};
@@ -805,7 +888,10 @@ function renderSources(){
     +'<div><span><code>data/seed/lmc_ideas_followups.csv</code> · '+S.seed.ideas.length+' ideas</span><span>repo seed</span></div>'
     +Object.keys(sh).map(function(k){var s=sh[k];return '<div><span><code>'+esc(k)+'</code> · '+s.rows+' '+s.kind+'</span><span>imported '+esc(s.at)+' by '+esc(s.by||'')+'</span></div>';}).join('')
     +Object.keys(lo).map(function(k){var s=lo[k];return '<div><span><code>'+esc(k)+'</code> · '+s.rows+' '+s.kind+'</span><span>this device only · '+esc(s.at)+'</span></div>';}).join('');
-  $('log').innerHTML=(S.shared.log||[]).slice(0,40).map(function(l){return '<div><b>'+esc(l.by)+'</b> '+esc(l.what)+' <span>· '+esc(l.at)+'</span></div>';}).join('')||'<div>No shared changes yet.</div>';
+  var ail=[].concat(S.local.ai_activity||[],S.shared.ai_activity||[]).slice(0,20);
+  var normal=(S.shared.log||[]).slice(0,40).map(function(l){return '<div><b>'+esc(l.by)+'</b> '+esc(l.what)+' <span>· '+esc(l.at)+'</span></div>';}).join('');
+  var aih=ail.length?'<div style="margin:8px 0 4px;color:var(--accent2)"><b>AI activity</b></div>'+ail.map(function(a){return '<div><b>'+esc(a.by)+'</b> '+esc(a.status)+' '+esc(a.kind)+' via '+esc(a.agent||'JEV')+' · '+esc(a.label)+' <span>· '+esc(a.at)+'</span></div>';}).join(''):'';
+  $('log').innerHTML=aih+normal||'<div>No shared changes yet.</div>';
 }
 function renderAll(){renderTasks();renderInbox();renderSources();renderAuth();}
 
