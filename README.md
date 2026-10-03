@@ -60,21 +60,22 @@ token and sets the owner password; after that the owner panel creates, resets an
 removes accounts and can rotate the token to cut everyone off at once. Every
 board change is a commit under the person's username.
 
-## The stack
+## Current architecture and status
 
-A new two-machine environment, built from scratch — both machines new, nothing
-from the current computer reused. The render node is the part that changes the
-economics:
+The [system map](https://borngifted.github.io/lmc-command/system-layout.html),
+[master status](docs/MASTER_STATUS.md) and [shared vocabulary](docs/THESAURUS.md)
+were reconciled with the master project records on **October 3, 2026**.
+They distinguish releases, development work and acceptance gates; they are not live uptime checks.
 
-- **Render node (Windows)** — AMD Ryzen AI Max+ 395, 128GB unified memory. Runs LTX 2.3
-  video on the Radeon iGPU, a local LLM in the unified memory pool, ComfyUI,
-  Blender + TRIPOINT, and markerless mocap. The everyday model cost moves here,
-  once — the $200/month AI bill goes away.
-- **Studio (Mac)** — Mac mini M5 Pro for editing, color, sound, the LMC COMMAND hub
-  and agent orchestration (Claude Code + MCP).
+- **LEO:** Windows, i7-13700F, 128 GB RAM, RTX 4070 Ti 12 GB; private LMC workspace and creative tools.
+- **SPARK:** DGX Spark GB10, approximately 121 GB unified memory; platform and large-model workloads. One GPU job at a time.
+- **JARVIS:** portable core, M3 release `v0.3.0-mvp-core`; JEV v2 live acceptance and production promotion remain pending.
+- **JEV:** studio-wide decision/routing layer. **house-agent** is the approved name for the Blackland role; older files still use JEV.
+- **Blackland:** Vantage interactive viewport and V-Ray finals direction, Unreal/FBX fallback retained. Tour acceptance is blocked; prior POC evidence does not establish readiness.
 
-Cloud tools (SkyReels, frontier models) stay in the kit for burst hero shots,
-billed at cost — not the daily default.
+The earlier Ryzen/Mac purchasing material is historical proposal content, not the installed inventory or a verified cost-saving result. Cloud reasoning and burst services remain explicitly selected resources.
+
+This public repository contains curated summaries. Private deployment documents remain outside it. Public board inputs may feed JEV, but its private labels and alerts are not written back here.
 
 ## Principles (from the handoff)
 

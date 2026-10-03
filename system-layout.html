@@ -45,23 +45,36 @@
   <div class="hero">
     <span class="eyebrow">Work Official LLC · LMC Command</span>
     <h1>LMC + JEV System Layout</h1>
-    <p>Live architecture reference for the Leo Marshall Creative autonomous command system. This page shows the operating model, decision layers, memory/vocabulary layer, execution path, and safety boundaries without exposing credentials or private infrastructure details.</p>
-    <div class="note"><strong>Core principle:</strong> Claude thinks, JEV decides/routes, tools act, LMC shows and controls, and persistent memory keeps shared terms and project context from resetting between sessions.</div>
+    <p>Architecture snapshot reconciled October 3, 2026; not a live health monitor. Reference for the Leo Marshall Creative autonomous command system. This page shows the operating model, decision layers, memory/vocabulary layer, execution path, and safety boundaries without exposing credentials or private infrastructure details.</p>
+    <div class="note"><strong>Core principle:</strong> JARVIS provides the portable core; JEV makes studio-wide decisions; Claude is the primary reasoner with Codex fallback; adapters and workers act. LMC provides public reference and private control surfaces. Receipts establish what actually happened.</div>
   </div>
 
-  <h2>System map</h2>
+  <h2>Current master status <small>— October 3, 2026</small></h2>
+  <p>Dated evidence, limitations and next steps: <a href="https://github.com/borngifted/lmc-command/blob/main/docs/MASTER_STATUS.md">master project status</a>. A configured service or recent heartbeat does not establish readiness.</p>
+  <div class="grid cols">
+    <div class="card"><span class="tag">Released Oct 2</span><h3>JARVIS M3 core</h3><p>v0.3.0-mvp-core: three live requests passed with claimable receipts. Full AI Console, live approval and platform-job acceptance remain outside that proof.</p></div>
+    <div class="card"><span class="tag">Development</span><h3>JEV v2 slice 1</h3><p>Tasks 1–15 reviewed; Task 16 offline acceptance underway. Live acceptance awaits recorded quota recovery Oct 5, 9am Eastern. Production migration, service changes and release remain deferred.</p></div>
+    <div class="card"><span class="tag">Blocked</span><h3>Blackland Vantage tour</h3><p>Oct 3 capture still reports an unavailable or minimized window; browser_ready=false. Prior camera/material/video POC is not a ready tour. Restore native capture and pass full integration and performance gates.</p></div>
+    <div class="card"><span class="tag">Development gate</span><h3>LMC Platform</h3><p>Infrastructure was healthy at the last recorded check; uptime was not revalidated here. Credential rotation P0-01 remains required before client data on SPARK.</p></div>
+    <div class="card"><span class="tag">Delivered Sep 30</span><h3>AndresAI</h3><p>8K masters and editable PSD delivered. Real cast heights remain estimates; cleanup and key rotation are recorded follow-ups.</p></div>
+    <div class="card"><span class="tag">Completion unverified</span><h3>PASSENGERS H3</h3><p>The Oct 1 Soul-reference hybrid Turbo job was accepted and running at its last observation. Inspect the existing output and motion/identity before declaring completion or submitting another job.</p></div>
+  </div>
+
+  <h2>System map — implemented core and target integrations</h2>
+  <p>The local Master Command Center holds the authoritative project chart, runbooks and decisions. Public summaries are curated from it; private deployment records stay local.</p>
   <div class="diagram">
-    <div class="row"><div class="box accent"><strong>LMC COMMAND CENTER</strong><small>Task Board · Idea Inbox · Project Status · AI Activity · Client/Developer Views</small></div></div>
+    <div class="row"><div class="box accent"><strong>LMC COMMAND CENTER</strong><small>Public Pages board and reference · Private Next.js workspace on LEO · AI Console integration deferred</small></div></div>
+    <div class="row"><div class="box green"><strong>JARVIS PORTABLE CORE</strong><small>Intent · planning · tools · verification · memory · permission checks; M3 released, v2 development separate</small></div></div>
     <div class="arrow">↓</div>
     <div class="row">
       <div class="box half purple"><strong>CLAUDE / CLAUDE CODE</strong><small>Deep reasoning · planning · coding · architecture · recovery</small></div>
-      <div class="box half accent"><strong>JEV DECISION + ROUTING LAYER</strong><small>Fast routing · task classification · model/tool selection · real-time decisions</small></div>
+      <div class="box half accent"><strong>JEV DECISION + ROUTING LAYER</strong><small>Structured decisions · attention labels · escalation · bounded actions through adapters</small></div>
     </div>
     <div class="arrow">↓</div>
     <div class="row">
-      <div class="box third"><strong>OpenAI / Codex</strong><small>Alternative execution/reasoning path</small></div>
+      <div class="box third"><strong>OpenAI / Codex</strong><small>Fallback and continuation reasoning/execution path</small></div>
       <div class="box third"><strong>MCP + Tool Adapters</strong><small>GitHub · Google · browser · APIs · local services</small></div>
-      <div class="box third"><strong>Local Creative Tools</strong><small>ComfyUI · Blender · Unreal · FFmpeg · render workflows</small></div>
+      <div class="box third"><strong>Local Creative Tools</strong><small>ComfyUI · Blender · Vantage / V-Ray · Unreal fallback · FFmpeg</small></div>
     </div>
     <div class="arrow">↓</div>
     <div class="row">
@@ -70,8 +83,8 @@
     </div>
     <div class="arrow">↓</div>
     <div class="row">
-      <div class="box quarter"><strong>LEO</strong><small>Studio workstation capabilities</small></div>
-      <div class="box quarter"><strong>SPARK</strong><small>Large-model / ComfyUI capability node</small></div>
+      <div class="box quarter"><strong>LEO</strong><small>Windows · i7-13700F · 128 GB RAM · RTX 4070 Ti 12 GB</small></div>
+      <div class="box quarter"><strong>SPARK</strong><small>GB10 · ~121 GB unified memory · one GPU job at a time</small></div>
       <div class="box quarter"><strong>Cloud</strong><small>Burst tools and connected services</small></div>
       <div class="box quarter"><strong>Human Approval</strong><small>Required where policy/risk demands it</small></div>
     </div>
@@ -85,7 +98,7 @@
     <div class="card"><span class="tag">Verification</span><h3>Audit + receipts</h3><p>Meaningful actions are logged, and the architecture is being extended around execution receipts so the UI never treats an unverified claim as completed work.</p></div>
   </div>
 
-  <h2>Guardrails already in the current build</h2>
+  <h2>Guardrail design and implementation boundaries</h2>
   <div class="grid cols">
     <div class="card"><h3>Architect-specified facts</h3><p>Core architectural facts are protected from casual mutation by non-authorized actors.</p></div>
     <div class="card"><h3>Fail-closed roles</h3><p>Unknown or unset actor roles do not silently gain access.</p></div>
@@ -95,9 +108,11 @@
     <div class="card"><h3>Human override</h3><p>External or higher-risk actions remain gated by policy and human approval.</p></div>
   </div>
 
+  <p>These controls do not certify end-to-end acceptance. M3 did not exercise live approval or platform execution; v2 easy actions are constrained by permission levels and adapters, and code.edit currently has no declared undo inverse.</p>
+
   <h2>Vocabulary layer</h2>
   <div class="card">
-    <p>The recommended “ubiquitous language” idea is now part of the architecture. Rather than depending on one agent remembering a conversation, every important domain term should have a canonical definition.</p>
+    <p>Approved naming distinguishes <strong>JEV</strong> (studio-wide routing) from <strong>house-agent</strong> (the Blackland role). Legacy JEV heartbeat filenames remain; this decision does not imply every registry has migrated. Canonical definitions keep agents and developers aligned.</p>
     <ul>
       <li><strong>Canonical term</strong> — the one name the system stores.</li>
       <li><strong>Aliases</strong> — natural language names people may also use.</li>
@@ -120,7 +135,7 @@
   </div>
 
   <div class="footer">
-    Public architecture summary · no credentials or private client data are exposed here.<br/>
+    Reconciled 2026-10-03 · Public architecture summary · no credentials or private client data are exposed here.<br/>
     Repository: <a href="https://github.com/borngifted/lmc-command">borngifted/lmc-command</a>
   </div>
 </div>
