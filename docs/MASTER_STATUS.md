@@ -2,6 +2,16 @@
 
 **Reconciled: 2026-10-03.** This is a public, curated snapshot of the master project records, not a live service monitor. Dates below identify the evidence; a recorded success does not certify current uptime. Private operational documents and client records remain local.
 
+## October 3 internal pilot recovery
+
+- Pinned JARVIS M3 tag `v0.3.0-mvp-core` (commit `825d202`) staged separately from the unfinished v2 checkout. The full pinned test suite passed; SQLite backup integrity passed. The existing scheduled task now launches that pinned code with the original configuration/state paths. The original task definition is saved for rollback.
+- JARVIS API, a small local operator page and API docs now return HTTP 200. Health reports six projects, six tools, ready memory and permission ceiling 2. WebSocket handshake passed; an empty request correctly returned 422 without invoking a provider. The operator page defaults to read-only requests; this is not the full planned AI Console.
+- LMC web and tunnel tasks were restarted. Workspace, API and orchestrator checks return HTTP 200. Spark's five containers were independently verified healthy. JARVIS and the workspace bind only to loopback; client access is not enabled.
+- Both disposable acceptance demos passed earlier today. No live reasoning/action acceptance or provider availability was established by this recovery; real requests may consume quota or incur cost. The pinned runtime shares the existing Python environment, so dependency isolation is not yet a separate release environment.
+- The owner confirmed P0-01 credential rotation complete on October 3. Independent verification remains pending: the unprivileged root password-status check was denied. This supersedes older wording that assumes rotation has not happened; it does not close the verification/client-data gate.
+- Tailscale is installed and running. Phone/device authorization, authenticated client access, project isolation, restart/rollback drills and v2 live gates remain launch requirements. Blackland tour readiness is unchanged.
+- Monday October 5 target: internal pilot plus a separately gated client preview. Full tool autonomy, voice and the Vantage tour are not committed launch features.
+
 ## System architecture
 
 | Layer | Responsibility | Current boundary |
@@ -23,11 +33,11 @@ The public board may supply source cards. JEV v2 labels and alerts stay in the p
 | Project | Evidence and status | Next step / acceptance boundary |
 |---|---|---|
 | Master Command Center | Local chart, runbooks, infrastructure inventory, agent definitions and state schemas exist (Oct 1–3 records). Some older ledger prose predates later releases | Keep dated source records authoritative; dashboard/orchestrator phases are not implied complete by the chart existing |
-| LMC COMMAND | Public architecture and vocabulary were on `main`; the separate local router checkout has an unpushed documentation commit and router edits | This publication reconciles public summaries only. Private deployment docs and unrelated router edits remain outside this update |
+| LMC COMMAND | Public architecture and vocabulary were on `main`; the separate local router checkout has an unpushed documentation commit and router edits | The live public summary has been updated following local pilot recovery. Private deployment docs and unrelated router edits remain outside this update |
 | JARVIS M3 | Master chart records `v0.3.0-mvp-core` merged Oct 2. M3 results record three live requests passing with claimable receipts and `mvp_three.py --live` exit 0 | AI Console remains deferred. M3 did not prove live approvals or platform job execution; the orchestrator was unreachable in those acceptance runs |
 | JEV v2 slice 1 | Local development ledger records Tasks 1–15 complete/reviewed; Task 16 offline acceptance work underway. A 976-test run passed before later focused fixes; subsequent affected tests are recorded separately | Live acceptance awaits Claude quota recovery, recorded as Oct 5 at 9am Eastern. Production migration/configuration, service changes, release tag and push remain deferred. Do not present offline doubles as live acceptance |
 | Blackland digital twin | Cabinetry audit: 295/295 parts within 0.5 mm. Real Vantage camera/material changes, window-only video and a saved-session restore were previously demonstrated in the POC | **Blocked, not ready for user acceptance.** Oct 3 18:45 UTC heartbeat records a responding Vantage process and connected bridge, but capture reports `ValueError: Vantage window is unavailable or minimized`; `browser_ready=false`. Restore the viewport, recalibrate native capture, then complete visual/performance and integration gates |
-| LMC Platform | Master chart records five healthy containers at its last infrastructure check and a private repository push on Oct 1 | Current uptime not revalidated for this publication. P0-01 credential rotation remains the prerequisite for client data on SPARK |
+| LMC Platform | Master chart records five healthy containers at its last infrastructure check and a private repository push on Oct 1 | Current container health was revalidated during the recovery above. P0-01 rotation is owner-confirmed complete; verification remains the prerequisite for client data on SPARK |
 | AndresAI | Master chart records 8K masters and editable PSD delivered Sep 30 | Real cast heights remain unverified estimates; duplicate assets and key rotation remain recorded follow-ups |
 | PASSENGERS H3 | Last recorded live observation: Soul-reference hybrid Turbo render accepted and running Oct 1 at 20:23 UTC | Completion is **unverified**, not presumed still running. Inspect the existing job history, fresh MP4 and motion/identity; do not submit a duplicate. Frame-96 guide quality and final-quality approval remain open |
 

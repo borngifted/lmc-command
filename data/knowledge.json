@@ -4,6 +4,12 @@
   "entries": [
     {
       "date": "2026-10-03",
+      "tag": "launch",
+      "title": "Internal M3 pilot recovered; client launch still gated",
+      "body": "Pinned M3 tests and database backup passed. Local JARVIS operator page, workspace and tunnels are online; Spark containers are healthy. No new live provider acceptance claimed. Owner confirms credential rotation complete; independent verification, authenticated client access and project isolation remain pending for Monday."
+    },
+    {
+      "date": "2026-10-03",
       "tag": "status",
       "title": "Master architecture and project status reconciled",
       "body": "System map, shared vocabulary and docs/MASTER_STATUS.md now distinguish JARVIS M3 released Oct 2, JEV v2 live acceptance pending, Blackland Vantage blocked, AndresAI delivered and PASSENGERS completion unverified. These are dated records, not live uptime checks."

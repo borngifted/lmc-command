@@ -210,6 +210,10 @@ Its purpose is to prevent agents, developers, and team members from inventing ne
 **Type:** Retired local tool<br>
 **Meaning:** Globally uninstalled on LEO October 3, 2026. Previously generated graphs are retained artifacts, not an installed service or the planned LightRAG memory layer.
 
+### Internal pilot operator page
+**Type:** Local test interface<br>
+**Meaning:** Small browser form around the pinned M3 API, defaulting to read-only requests and exposing returned receipts. It is loopback-only and is not the full AI Console, a client portal, or a v2 live-acceptance result.
+
 ## Naming pattern
 
 When introducing a new term, use:
