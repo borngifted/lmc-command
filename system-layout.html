@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LMC + JEV System Layout</title>
+<style>
+  :root{
+    --bg:#090d14;--panel:#111827;--panel2:#0f172a;--line:#2b3a55;
+    --text:#eef2ff;--muted:#aab4c8;--accent:#76a9ff;--good:#56d364;
+    --warn:#f2cc60;--danger:#ff7b72;--purple:#bc8cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(180deg,#07101e,#0b1220 45%,#080d15);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .wrap{max-width:1180px;margin:auto;padding:32px 20px 72px}
+  h1{font-size:clamp(2rem,5vw,4.25rem);line-height:.95;margin:.2rem 0 1rem;letter-spacing:-.04em}
+  h2{margin-top:2.5rem;font-size:1.55rem}
+  h3{margin:.2rem 0 .4rem;font-size:1.05rem}
+  p{color:var(--muted)}
+  .eyebrow{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:#c6d4ee;background:#0b1322;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+  .hero{padding:24px 0 10px}
+  .note{border-left:3px solid var(--accent);background:#0d1627;padding:14px 16px;border-radius:0 12px 12px 0}
+  .grid{display:grid;gap:14px}
+  .grid.cols{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .card{background:linear-gradient(180deg,rgba(17,24,39,.95),rgba(10,16,28,.95));border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 10px 35px rgba(0,0,0,.18)}
+  .tag{display:inline-block;font-size:.72rem;padding:4px 8px;border-radius:999px;margin-bottom:8px;background:#172036;color:#dbe7ff;border:1px solid #2c3b59}
+  .diagram{display:grid;gap:10px;margin-top:18px}
+  .row{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;align-items:stretch}
+  .box{grid-column:span 12;background:#0e1727;border:1px solid #30415f;border-radius:14px;padding:14px;text-align:center}
+  .box strong{display:block;font-size:1rem}
+  .box small{color:var(--muted)}
+  .half{grid-column:span 6}.third{grid-column:span 4}.quarter{grid-column:span 3}
+  .accent{border-color:#4274c9}.purple{border-color:#7556b6}.green{border-color:#3c8c57}.yellow{border-color:#9c7b2e}
+  .arrow{text-align:center;color:#7ea6e6;font-size:1.4rem;line-height:1}
+  ul{padding-left:1.2rem;color:var(--muted)}
+  li{margin:.35rem 0}
+  code{background:#121c2d;border:1px solid #253650;border-radius:6px;padding:.1rem .35rem;color:#dce8ff}
+  a{color:#9ec5ff}
+  .footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:#7f8ca3;font-size:.9rem}
+  @media(max-width:760px){.half,.third,.quarter{grid-column:span 12}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Work Official LLC · LMC Command</span>
+    <h1>LMC + JEV System Layout</h1>
+    <p>Live architecture reference for the Leo Marshall Creative autonomous command system. This page shows the operating model, decision layers, memory/vocabulary layer, execution path, and safety boundaries without exposing credentials or private infrastructure details.</p>
+    <div class="note"><strong>Core principle:</strong> Claude thinks, JEV decides/routes, tools act, LMC shows and controls, and persistent memory keeps shared terms and project context from resetting between sessions.</div>
+  </div>
+
+  <h2>System map</h2>
+  <div class="diagram">
+    <div class="row"><div class="box accent"><strong>LMC COMMAND CENTER</strong><small>Task Board · Idea Inbox · Project Status · AI Activity · Client/Developer Views</small></div></div>
+    <div class="arrow">↓</div>
+    <div class="row">
+      <div class="box half purple"><strong>CLAUDE / CLAUDE CODE</strong><small>Deep reasoning · planning · coding · architecture · recovery</small></div>
+      <div class="box half accent"><strong>JEV DECISION + ROUTING LAYER</strong><small>Fast routing · task classification · model/tool selection · real-time decisions</small></div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="row">
+      <div class="box third"><strong>OpenAI / Codex</strong><small>Alternative execution/reasoning path</small></div>
+      <div class="box third"><strong>MCP + Tool Adapters</strong><small>GitHub · Google · browser · APIs · local services</small></div>
+      <div class="box third"><strong>Local Creative Tools</strong><small>ComfyUI · Blender · Unreal · FFmpeg · render workflows</small></div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="row">
+      <div class="box half green"><strong>LMC PLATFORM</strong><small>API · orchestrator · worker routing · project state · audit trail</small></div>
+      <div class="box half yellow"><strong>PERSISTENT KNOWLEDGE</strong><small>Project entities · decisions · vocabulary · thesaurus · LightRAG/Obsidian target layer</small></div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="row">
+      <div class="box quarter"><strong>LEO</strong><small>Studio workstation capabilities</small></div>
+      <div class="box quarter"><strong>SPARK</strong><small>Large-model / ComfyUI capability node</small></div>
+      <div class="box quarter"><strong>Cloud</strong><small>Burst tools and connected services</small></div>
+      <div class="box quarter"><strong>Human Approval</strong><small>Required where policy/risk demands it</small></div>
+    </div>
+  </div>
+
+  <h2>Why the system does not rely on model memory alone</h2>
+  <div class="grid cols">
+    <div class="card"><span class="tag">Vocabulary</span><h3>Shared language</h3><p>A formal <code>docs/THESAURUS.md</code> defines project terms, aliases, canonical names, and relationships so agents do not improvise meanings.</p></div>
+    <div class="card"><span class="tag">State</span><h3>Persistent project entities</h3><p>Projects, tasks, decisions, ideas, approvals, agents, alerts and related records are stored outside the model session.</p></div>
+    <div class="card"><span class="tag">Routing</span><h3>Capability-based assignment</h3><p>Jobs route by what a worker can actually do, not by a hard-coded machine name or a model guessing which host should receive work.</p></div>
+    <div class="card"><span class="tag">Verification</span><h3>Audit + receipts</h3><p>Meaningful actions are logged, and the architecture is being extended around execution receipts so the UI never treats an unverified claim as completed work.</p></div>
+  </div>
+
+  <h2>Guardrails already in the current build</h2>
+  <div class="grid cols">
+    <div class="card"><h3>Architect-specified facts</h3><p>Core architectural facts are protected from casual mutation by non-authorized actors.</p></div>
+    <div class="card"><h3>Fail-closed roles</h3><p>Unknown or unset actor roles do not silently gain access.</p></div>
+    <div class="card"><h3>Append-only audit</h3><p>Audit and job-event history are designed to remain traceable rather than being rewritten after the fact.</p></div>
+    <div class="card"><h3>Approval separation</h3><p>Structural changes cannot self-approve, and client approval is not treated as architect approval.</p></div>
+    <div class="card"><h3>Allowlisted handlers</h3><p>Worker execution is restricted to registered handlers rather than arbitrary command strings.</p></div>
+    <div class="card"><h3>Human override</h3><p>External or higher-risk actions remain gated by policy and human approval.</p></div>
+  </div>
+
+  <h2>Vocabulary layer</h2>
+  <div class="card">
+    <p>The recommended “ubiquitous language” idea is now part of the architecture. Rather than depending on one agent remembering a conversation, every important domain term should have a canonical definition.</p>
+    <ul>
+      <li><strong>Canonical term</strong> — the one name the system stores.</li>
+      <li><strong>Aliases</strong> — natural language names people may also use.</li>
+      <li><strong>Type</strong> — Project, Task, Event, Client, Worker, Capability, Approval, etc.</li>
+      <li><strong>Relationships</strong> — what the term may contain or reference.</li>
+      <li><strong>Do-not-confuse-with</strong> — terms that sound similar but mean something different.</li>
+      <li><strong>Examples</strong> — concrete project-specific usage.</li>
+    </ul>
+    <p><a href="https://github.com/borngifted/lmc-command/blob/main/docs/THESAURUS.md">Open the live thesaurus</a></p>
+  </div>
+
+  <h2>Operating model</h2>
+  <div class="grid cols">
+    <div class="card"><span class="tag">1</span><h3>Observe</h3><p>LMC, tools, project state, or a user action produces structured state.</p></div>
+    <div class="card"><span class="tag">2</span><h3>Understand</h3><p>Canonical vocabulary and active project context resolve what names and references mean.</p></div>
+    <div class="card"><span class="tag">3</span><h3>Route</h3><p>JEV decides whether the task belongs on a fast path, deep-reasoning path, or specific capable worker.</p></div>
+    <div class="card"><span class="tag">4</span><h3>Act</h3><p>Claude Code, Codex, MCP, or a registered local tool performs the bounded action.</p></div>
+    <div class="card"><span class="tag">5</span><h3>Verify</h3><p>The system records result state and activity instead of trusting a generated statement that work was completed.</p></div>
+    <div class="card"><span class="tag">6</span><h3>Remember</h3><p>Reusable terms, decisions, project state and proven workflows are persisted for later sessions.</p></div>
+  </div>
+
+  <div class="footer">
+    Public architecture summary · no credentials or private client data are exposed here.<br/>
+    Repository: <a href="https://github.com/borngifted/lmc-command">borngifted/lmc-command</a>
+  </div>
+</div>
+</body>
+</html>
