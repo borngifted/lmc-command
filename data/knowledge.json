@@ -4,6 +4,12 @@
   "entries": [
     {
       "date": "2026-10-03",
+      "tag": "local-ai",
+      "title": "JARVIS moves to Spark-only reasoning; requests held during setup",
+      "body": "Owner requires no cloud fallback. Ollama ARM64 release checksum passed; local model downloads are underway. Seven focused local-only tests passed, but real inference and full launch acceptance remain pending. Existing image/video assets are preserved; newest image/video licences require separate checks. See docs/MASTER_STATUS.md."
+    },
+    {
+      "date": "2026-10-03",
       "tag": "launch",
       "title": "Internal M3 pilot recovered; client launch still gated",
       "body": "Pinned M3 tests and database backup passed. Local JARVIS operator page, workspace and tunnels are online; Spark containers are healthy. No new live provider acceptance claimed. Owner confirms credential rotation complete; independent verification, authenticated client access and project isolation remain pending for Monday."

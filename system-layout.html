@@ -46,10 +46,10 @@
     <span class="eyebrow">Work Official LLC · LMC Command</span>
     <h1>LMC + JEV System Layout</h1>
     <p>Architecture snapshot reconciled October 3, 2026; not a live health monitor. Reference for the Leo Marshall Creative autonomous command system. This page shows the operating model, decision layers, memory/vocabulary layer, execution path, and safety boundaries without exposing credentials or private infrastructure details.</p>
-    <div class="note"><strong>Core principle:</strong> JARVIS provides the portable core; JEV makes studio-wide decisions; Claude is the primary reasoner with Codex fallback; adapters and workers act. LMC provides public reference and private control surfaces. Receipts establish what actually happened.</div>
+    <div class="note"><strong>Core principle:</strong> JARVIS provides the portable core; JEV makes studio-wide decisions; Spark-hosted local models are the required reasoners with no cloud fallback; adapters and workers act. LMC provides public reference and private control surfaces. Receipts establish what actually happened.</div>
   </div>
 
-  <div class="note"><strong>Internal pilot recovered October 3:</strong> pinned M3 API and a local read-only-default operator page are online; workspace and tunnels respond. Full pinned tests passed. Live provider acceptance and client access remain pending. Owner confirms credential rotation complete; independent verification is pending. <a href="https://github.com/borngifted/lmc-command/blob/main/docs/MASTER_STATUS.md">Recovery evidence and Monday gates</a>.</div>
+  <div class="note"><strong>Local-only transition — October 3:</strong> Spark runtime installed and checksum verified; reasoning, coding, video and speech downloads are in progress. JARVIS requests are held until local inference and execution pass acceptance. Cloud fallback is disabled. Existing image models are preserved; new image licensing is under review. Client access remains gated. <a href="https://github.com/borngifted/lmc-command/blob/main/docs/MASTER_STATUS.md">Measured status and launch gates</a>.</div>
   <h2>Current master status <small>— October 3, 2026</small></h2>
   <p>Dated evidence, limitations and next steps: <a href="https://github.com/borngifted/lmc-command/blob/main/docs/MASTER_STATUS.md">master project status</a>. A configured service or recent heartbeat does not establish readiness.</p>
   <div class="grid cols">
@@ -68,12 +68,12 @@
     <div class="row"><div class="box green"><strong>JARVIS PORTABLE CORE</strong><small>Intent · planning · tools · verification · memory · permission checks; M3 released, v2 development separate</small></div></div>
     <div class="arrow">↓</div>
     <div class="row">
-      <div class="box half purple"><strong>CLAUDE / CLAUDE CODE</strong><small>Deep reasoning · planning · coding · architecture · recovery</small></div>
+      <div class="box half purple"><strong>SPARK LOCAL REASONING</strong><small>Qwen3.8 selected; download and local acceptance pending</small></div>
       <div class="box half accent"><strong>JEV DECISION + ROUTING LAYER</strong><small>Structured decisions · attention labels · escalation · bounded actions through adapters</small></div>
     </div>
     <div class="arrow">↓</div>
     <div class="row">
-      <div class="box third"><strong>OpenAI / Codex</strong><small>Fallback and continuation reasoning/execution path</small></div>
+      <div class="box third"><strong>NO CLOUD FALLBACK</strong><small>Local failures stop and ask; cloud execution is disabled for JARVIS</small></div>
       <div class="box third"><strong>MCP + Tool Adapters</strong><small>GitHub · Google · browser · APIs · local services</small></div>
       <div class="box third"><strong>Local Creative Tools</strong><small>ComfyUI · Blender · Vantage / V-Ray · Unreal fallback · FFmpeg</small></div>
     </div>
@@ -130,7 +130,7 @@
     <div class="card"><span class="tag">1</span><h3>Observe</h3><p>LMC, tools, project state, or a user action produces structured state.</p></div>
     <div class="card"><span class="tag">2</span><h3>Understand</h3><p>Canonical vocabulary and active project context resolve what names and references mean.</p></div>
     <div class="card"><span class="tag">3</span><h3>Route</h3><p>JEV decides whether the task belongs on a fast path, deep-reasoning path, or specific capable worker.</p></div>
-    <div class="card"><span class="tag">4</span><h3>Act</h3><p>Claude Code, Codex, MCP, or a registered local tool performs the bounded action.</p></div>
+    <div class="card"><span class="tag">4</span><h3>Act</h3><p>An audited local tool performs the bounded action through permission checks and receipts. Local coding and media actions remain acceptance-gated.</p></div>
     <div class="card"><span class="tag">5</span><h3>Verify</h3><p>The system records result state and activity instead of trusting a generated statement that work was completed.</p></div>
     <div class="card"><span class="tag">6</span><h3>Remember</h3><p>Reusable terms, decisions, project state and proven workflows are persisted for later sessions.</p></div>
   </div>

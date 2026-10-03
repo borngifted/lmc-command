@@ -2,7 +2,21 @@
 
 **Reconciled: 2026-10-03.** This is a public, curated snapshot of the master project records, not a live service monitor. Dates below identify the evidence; a recorded success does not certify current uptime. Private operational documents and client records remain local.
 
-## October 3 internal pilot recovery
+## October 3 local-only transition — current status
+
+The owner requires **all JARVIS reasoning on Spark, with no cloud fallback**, including reasoning, coding/tool use, image, video and speech models. This supersedes the earlier Claude-primary design and the recovery state below.
+
+- Verified: official ARM64 Ollama 0.35.1 installed with a passing release SHA-256 check; bound to Spark loopback with `OLLAMA_NO_CLOUD=1`, one loaded model maximum and unload-after-request configuration. No drivers or existing ComfyUI environment were changed.
+- In progress: Qwen3.8 27B reasoning/vision download; Qwen3-Coder-Next queued; Qwen3-ASR 1.7B, Qwen3-TTS 1.7B CustomVoice, Wan2.2 TI2V 5B and the latest Wan2.2 Animate-2 14B distilled variant downloads. The media downloader pins upstream revisions, checks file sizes and published weight SHA-256 hashes, and reserves 100 GiB of free disk. Downloaded weights are not proof of working inference.
+- Existing Qwen-Image 2512, Image-Edit 2509/2511 and MiniMax H3 weights were found and preserved. Their presence does not certify the new JARVIS workflows.
+- JARVIS requests are **held (HTTP 503)** during migration; the old WebSocket request route is removed. The operator page remains available to show setup status. Do not describe the earlier M3 recovery as a currently usable reasoning pilot.
+- Local provider and direct memory-read executor are wired into the held M3-based runtime; the original M3 archive and unfinished v2 checkout are preserved. Seven focused tests and the full M3-based suite passed: bounded loopback requests, rejection of invalid/redirected/unavailable responses, no fallback, real read receipts, and refusal of cloud adapter execution. Health now exposes only three memory-read tools, with permission ceiling 0. The private model tunnel returns the Spark runtime version. End-to-end inference, speed, restart behaviour, media generation and voice remain unverified.
+- Model licensing is checked per release. Qwen-Image 2.1 is research-only; LTX-2.5 has conditional commercial terms. Neither is promoted for client work. A separate evaluation-library preference is pending. No paid licence or purchase is authorized by this status update.
+- Client launch remains gated on credential verification, authentication/project isolation and real acceptance tests. The older v2 Claude-quota dependency is historical; it cannot authorize a cloud fallback under the new policy.
+
+Sources: [Qwen3.8](https://huggingface.co/Qwen/Qwen3.8-27B), [Qwen3-Coder-Next](https://huggingface.co/Qwen/Qwen3-Coder-Next), [ASR](https://huggingface.co/Qwen/Qwen3-ASR-1.7B), [TTS](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice), [Wan](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B), [Qwen-Image 2.1 licence](https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE), [Ollama local-only mode](https://docs.ollama.com/faq).
+
+## Earlier October 3 internal pilot recovery (superseded by local-only hold)
 
 - Pinned JARVIS M3 tag `v0.3.0-mvp-core` (commit `825d202`) staged separately from the unfinished v2 checkout. The full pinned test suite passed; SQLite backup integrity passed. The existing scheduled task now launches that pinned code with the original configuration/state paths. The original task definition is saved for rollback.
 - JARVIS API, a small local operator page and API docs now return HTTP 200. Health reports six projects, six tools, ready memory and permission ceiling 2. WebSocket handshake passed; an empty request correctly returned 422 without invoking a provider. The operator page defaults to read-only requests; this is not the full planned AI Console.
@@ -56,7 +70,7 @@ The public board may supply source cards. JEV v2 labels and alerts stay in the p
 |---|---|
 | LEO | Windows workstation; i7-13700F, 128 GB RAM, RTX 4070 Ti with 12 GB VRAM. House authoring stays on Blender 4.4.3; do not save it through the newer default Blender association |
 | SPARK | DGX Spark GB10, approximately 121 GB unified memory, Ubuntu; large-model/ComfyUI and platform workloads. Connect by configured hostname, not a DHCP address; preserve the one-GPU-job policy |
-| Cloud | Explicitly selected reasoning and burst services. Local hardware does not imply every workflow is free or subscription-free |
+| Cloud | Disabled for JARVIS reasoning and fallback by owner direction. Separate studio tools are not implicitly reconfigured |
 | Current memory | Master chart, project memory, runbooks, JARVIS SQLite records and source-backed notes. M3 memory success is not evidence that full LightRAG/Obsidian ingestion is deployed |
 | Target memory and interfaces | LightRAG plus Obsidian-backed memory on LEO; full tool autonomy, private panels, desktop/phone voice and workflow learning remain acceptance-gated roadmap work |
 | Heartbeats | Recent timestamp means a check ran. Three unchanged task/step/next cycles mean **stuck**; process liveness is not implementation progress |

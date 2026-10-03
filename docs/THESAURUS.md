@@ -230,3 +230,11 @@ When introducing a new term, use:
 ## Change policy
 
 Changes to core terms should be reviewed because vocabulary changes can alter routing, memory retrieval, database schemas, prompts, and UI behavior.
+
+## Owner policy amendment — October 3, 2026
+
+**JARVIS local-only reasoning:** inference runs on Spark. Cloud models, Claude/Codex delegation and cloud fallback are forbidden for JARVIS requests. A local failure stops with an explicit unavailable/error result. Earlier Claude-primary and local-classifier-only descriptions are historical and superseded for JARVIS.
+
+**Model library:** weights stored on Spark for reasoning/coding/tool use, image, video and speech. Downloaded, licence-cleared, inference-tested and integrated are separate states. One GPU job at a time; existing working models are preserved.
+
+**Evaluation-only model:** not cleared for client production. A newer release does not inherit its predecessor's licence.
