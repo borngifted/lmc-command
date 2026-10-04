@@ -6,7 +6,7 @@ Deployment authorized by the owner on October 3, 2026. Public preview publicatio
 
 PR #1, head `abff379e2e1f38e48e2e8ae655a066fcfa1e564c`, was reviewed in the isolated `integration/neural-ops-safe` worktree. The existing development branches and their uncommitted work were preserved. This branch descends from the PR; its main base was already current when fetched.
 
-The neon panels, responsive shell, project cards and topology styling originate in `ops.html`. The topology now explicitly describes interface relationships, not live service health. The adapter implements actual platform GET contracts; the evidence uses a simulated HTTP platform, not live infrastructure. This is an integration candidate, not a client launch readiness claim.
+The neon panels, responsive shell, project cards and topology styling originate in `ops.html`. The topology now explicitly describes interface relationships, not live service health. The adapter implements actual platform GET contracts; the evidence uses a simulated HTTP platform, not live infrastructure. The public preview and local private gateway have been deployed; this is not a client launch readiness claim.
 
 ## Outdated or unsafe assumptions corrected
 
@@ -44,8 +44,18 @@ The public Pages experience stays disconnected. `_config.yml` excludes the adapt
 
 For an approved private evaluation, use a dedicated loopback port and set `OPS_ENABLED=1`, `OPS_PLATFORM_ORIGIN` to the private API origin, and `OPS_ORIGIN` to the exact browser origin; optionally set `OPS_PORT` (default 8391). Run `node private-ops/server.mjs`. The service binds loopback only. Sign in with an individual platform account; never enter credentials on the public preview. Session attempts are capped at ten per minute per gateway. The private gateway serves only its UI and telemetry, not the old public board or routing pages.
 
-Before any client deployment: configure private HTTPS access, confirm Pages artifact exclusions in the actual deployment build, and run real staff/client isolation and revocation tests using approved test accounts. Verify actual telemetry against the platform and assess the existing application's own security gates. These remain unverified; no production connection or deployment occurred here. This UI cannot certify Spark reasoning readiness, Vantage tour readiness, or a Monday launch.
+Before any client deployment: configure private HTTPS access, confirm Pages artifact exclusions in the actual deployment build, and run real staff/client isolation and revocation tests using approved test accounts. Verify actual telemetry against the platform and assess the existing application's own security gates. Client HTTPS access and real client-account isolation remain unverified. This UI cannot certify Spark reasoning readiness, Vantage tour readiness, or a Monday launch.
 
 ## Rollback
 
 Before deployment, rollback means leaving this isolated branch unmerged: nothing running has changed. During an approved private evaluation, stop only its dedicated gateway process or unset `OPS_ENABLED` and restart that gateway; its in-memory sessions disappear. Do not stop the platform or workers. Restore the prior static artifact if a public preview was separately approved and published. There are no migrations, project mutations, credential changes, or model changes to reverse; normal platform sign-in audit records are retained. Never reset the original development checkouts.
+
+## Verified deployment, 2026-10-04 UTC
+
+- Public preview: https://borngifted.github.io/lmc-command/ops.html — HTTP 200.
+- Pages build for `4e93d7e74879da13745327205067a2375c92912a` succeeded with no build error.
+- Public page remains disconnected; legacy bridge address absent. Existing Task Board returns HTTP 200.
+- Private adapter and fixture-evidence URLs return HTTP 404 on Pages.
+- Private gateway: real authenticated developer telemetry succeeded; logout invalidated the test session (401 on subsequent read). No credentials or private telemetry were published.
+- Latest isolated suite: 22 passing checks, including invalid-password rejection and desktop/mobile sign-in.
+- Still pending: approved private HTTPS hostname, live client-account acceptance, and closure of the existing client-data security gate. No client-facing readiness claim.
