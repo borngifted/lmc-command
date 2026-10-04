@@ -5,7 +5,7 @@ if(document.body.dataset.private==='true') {
   document.querySelector('.topnav').hidden=true; // existing public links are not private gateway routes
   $('login').hidden=false;
   $('boundary').textContent='Private experimental view. Authorization and project membership are checked by the platform on every refresh.';
-  $('sessionNote').textContent='Connect with an existing platform session. No execution is available.';
+  $('sessionNote').textContent='Sign in with your own platform account. No execution is available.';
   let busy=false, generation=0, signedOut=false;
   async function refresh(){
     if(busy||signedOut)return;busy=true;const current=generation;
@@ -19,7 +19,7 @@ if(document.body.dataset.private==='true') {
       if(!data.projects.length)row('projects','No assigned projects','No project data available to this session.');
     }catch{if(current===generation){clearData();$('status').textContent='UNAVAILABLE · SIGN IN OR RETRY';$('freshness').textContent='No current observation. Previous private data cleared; no fallback used.';}}finally{busy=false;}
   }
-  $('login').addEventListener('submit',async e=>{e.preventDefault();const current=++generation;const token=$('token').value;$('token').value='';clearData();try{const r=await fetch('/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});if(!r.ok)throw Error();if(current!==generation)return;signedOut=false;await refresh();}catch{if(current===generation){clearData();$('status').textContent='AUTHENTICATION UNAVAILABLE';}}});
+  $('login').addEventListener('submit',async e=>{e.preventDefault();const current=++generation;signedOut=true;const email=$('email').value;const password=$('password').value;$('password').value='';clearData();try{const r=await fetch('/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});if(!r.ok)throw Error();if(current!==generation)return;signedOut=false;await refresh();}catch{if(current===generation){clearData();$('status').textContent='AUTHENTICATION UNAVAILABLE';}}});
   $('logout').onclick=async()=>{++generation;signedOut=true;clearData();try{await fetch('/logout',{method:'POST'});$('status').textContent='SIGNED OUT';}catch{$('status').textContent='SIGN OUT FAILED · CLOSE THIS WINDOW';}finally{$('freshness').textContent='Private data cleared.';}};
   refresh();setInterval(refresh,15000);
 }
