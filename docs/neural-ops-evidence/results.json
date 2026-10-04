@@ -1,10 +1,11 @@
 {
-  "testedAt": "2026-10-04T03:34:15.130Z",
+  "testedAt": "2026-10-04T03:37:20.453Z",
   "source": "simulated fixture; no production connection",
   "checks": [
     "feature flag defaults off",
     "anonymous denied",
     "cross origin session rejected",
+    "invalid password rejected",
     "client cookie HttpOnly",
     "client membership projection",
     "sensitive fields stripped",
@@ -24,5 +25,5 @@
     "client logout clears projects",
     "public artifact does not probe private APIs"
   ],
-  "passed": 21
+  "passed": 22
 }

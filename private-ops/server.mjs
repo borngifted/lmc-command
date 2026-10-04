@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 const staff = new Set(['ADMIN','PROJECT_MANAGER','INTERNAL_CREATIVE']);
 export function createGateway({enabled=false, upstream, origin, simulated=false}={}) {
   const sessions = new Map();
+  let loginAttempts=[];
   const base = upstream && new URL(upstream);
   if(enabled && (!base || !origin || !['http:','https:'].includes(base.protocol) || base.username || base.password)) throw Error('Explicit upstream and origin required');
   const api = async (path, token) => {
@@ -22,8 +23,18 @@ export function createGateway({enabled=false, upstream, origin, simulated=false}
       const path=new URL(req.url,origin).pathname;
       if(req.method==='POST' && path==='/session') {
         if(req.headers.origin!==origin || req.headers['content-type']!=='application/json') return send(403,{error:'Same-origin JSON required'});
+        loginAttempts=loginAttempts.filter(t=>t>Date.now()-60000);
+        if(loginAttempts.length>=10) return send(429,{error:'Too many sign-in attempts; retry in one minute'});
+        loginAttempts.push(Date.now());
         let body=''; for await(const part of req){body+=part;if(body.length>8192) return send(413,{error:'Request too large'});}
-        const {token}=JSON.parse(body);
+        const input=JSON.parse(body);
+        let token=input.token;
+        if(typeof input.email==='string' && typeof input.password==='string') {
+          if(input.email.length>320 || input.password.length>1024 || !input.email.trim() || !input.password) return send(400,{error:'Credentials required'});
+          const login=await fetch(new URL('/auth/login',base),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:input.email,password:input.password}),redirect:'error',signal:AbortSignal.timeout(5000)});
+          if(!login.ok) return send(login.status===401?401:502,{error:'Sign in unavailable'});
+          token=(await login.json()).access_token;
+        }
         if(typeof token!=='string' || token.length>4096 || !token.trim()) return send(400,{error:'Token required'});
         await api('/auth/me',token);
         const now=Date.now(); for(const [key,s] of sessions) if(s.expires<=now) sessions.delete(key);
