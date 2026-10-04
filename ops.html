@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LMC COMMAND · Neural Operations</title>
+<meta name="theme-color" content="#031109">
+<style>
+:root{--bg:#020805;--bg2:#07110b;--panel:#07140d;--line:#0c7e3f;--line2:#11d566;--ink:#d9ffe8;--muted:#6fa986;--lime:#2dff78;--warn:#ffd45c;--bad:#ff5e6a;--cyan:#54e8ff;--violet:#b678ff;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 30%,#0d2515 0,#06100a 32%,#020805 70%);color:var(--ink);font-family:var(--sans)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(45,255,120,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(45,255,120,.035) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 90%)}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(2,8,5,.92);border-bottom:1px solid #0b5f33;backdrop-filter:blur(14px);box-shadow:0 0 30px rgba(45,255,120,.08)}
+.brand{font:800 13px/1 var(--mono);letter-spacing:.18em;color:var(--lime);white-space:nowrap}.topnav{display:flex;gap:8px;flex-wrap:wrap}.topnav a,.chip{font:700 10px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:#98d6ae;text-decoration:none;border:1px solid #164f30;padding:7px 9px;background:#06140c}.topnav a:hover{border-color:var(--lime);color:var(--lime)}
+.spacer{flex:1}.live{display:flex;gap:7px;align-items:center;font:700 10px var(--mono);color:#9fdcb5}.dot{width:8px;height:8px;border-radius:50%;background:#335942}.dot.on{background:var(--lime);box-shadow:0 0 14px var(--lime)}.dot.warn{background:var(--warn);box-shadow:0 0 14px rgba(255,212,92,.55)}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr) 300px;gap:10px;padding:10px;max-width:1800px;margin:auto;min-height:calc(100vh - 49px)}
+.panel{background:linear-gradient(180deg,rgba(7,20,13,.94),rgba(3,12,7,.92));border:1px solid #0b5f33;box-shadow:inset 0 0 18px rgba(45,255,120,.025),0 0 24px rgba(0,0,0,.28);min-width:0}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-bottom:1px solid #0b5f33;color:var(--lime);font:800 10px var(--mono);letter-spacing:.14em;text-transform:uppercase}.sub{color:#5e9c76;font-weight:600;letter-spacing:.05em}
+.left,.right{display:flex;flex-direction:column;gap:10px}.stack{padding:8px}.stat{display:grid;grid-template-columns:1fr auto;gap:4px;padding:9px 8px;border-bottom:1px solid #0b3f25}.stat:last-child{border-bottom:0}.stat b{font:700 11px var(--mono);color:#caffdb}.stat span{font:700 11px var(--mono);color:var(--lime)}.stat small{grid-column:1/-1;color:#57896c;font:10px var(--mono)}
+.item{padding:9px;border:1px solid #0d4b2a;background:#051109;margin-bottom:7px}.item .t{font:700 11px var(--mono);color:#d7ffe4}.item .m{font:10px/1.45 var(--mono);color:#679579;margin-top:4px}.bar{height:4px;background:#0a2b19;margin-top:7px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.center{display:grid;grid-template-rows:minmax(540px,1fr) auto;gap:10px}.map{position:relative;overflow:hidden;min-height:560px}.map:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,rgba(45,255,120,.10),transparent 25%),radial-gradient(circle at 65% 40%,rgba(84,232,255,.06),transparent 20%)}
+svg{position:absolute;inset:0;width:100%;height:100%}.edge{stroke:#127440;stroke-width:1;opacity:.65}.edge.hot{stroke:var(--lime);filter:drop-shadow(0 0 4px var(--lime));stroke-dasharray:5 7;animation:dash 1.8s linear infinite}.edge.cyan{stroke:#218ca0}.edge.violet{stroke:#6947a0}@keyframes dash{to{stroke-dashoffset:-24}}
+.node{position:absolute;transform:translate(-50%,-50%);min-width:112px;padding:8px 10px;text-align:center;background:rgba(3,15,8,.95);border:1px solid #14874a;box-shadow:0 0 0 1px #031b0c inset,0 0 18px rgba(45,255,120,.08);font:800 10px var(--mono);letter-spacing:.05em;color:#caffd8;cursor:pointer;transition:.18s}.node:hover{border-color:var(--lime);box-shadow:0 0 22px rgba(45,255,120,.22);transform:translate(-50%,-50%) scale(1.04)}.node small{display:block;color:#568d6c;font:9px var(--mono);margin-top:3px}.node.core{min-width:145px;padding:14px;border-color:var(--lime);color:var(--lime);box-shadow:0 0 34px rgba(45,255,120,.18)}.node.spark{border-color:#23a8bd}.node.memory{border-color:#7f57c2}.node.bad{border-color:#9f3d45}.pulse{position:absolute;width:210px;height:210px;border:1px solid rgba(45,255,120,.18);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);animation:pulse 3s ease-out infinite}@keyframes pulse{0%{transform:translate(-50%,-50%) scale(.4);opacity:.7}100%{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+.legend{position:absolute;left:10px;bottom:10px;background:rgba(2,10,5,.82);border:1px solid #0e5430;padding:8px 9px;font:9px var(--mono);color:#5f9874}.legend b{color:var(--lime)}
+.bottomgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}.log{max-height:220px;overflow:auto;padding:8px}.logrow{display:grid;grid-template-columns:78px 82px 1fr;gap:8px;padding:7px 4px;border-bottom:1px solid #0b3a22;font:10px var(--mono)}.logrow time{color:#4e8062}.logrow b{color:#8ed5a7}.logrow span{color:#bde9cb}.quick{padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.quick button{appearance:none;border:1px solid #155a35;background:#06130b;color:#baf2ca;padding:10px 8px;font:800 10px var(--mono);text-transform:uppercase;cursor:pointer}.quick button:hover{border-color:var(--lime);color:var(--lime)}
+.kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding:8px}.k{border:1px solid #0d4b2a;padding:10px;background:#051109}.k strong{display:block;font:800 19px var(--mono);color:var(--lime)}.k span{font:9px var(--mono);color:#629175;text-transform:uppercase}
+.console{padding:8px}.console textarea{width:100%;min-height:115px;background:#020905;border:1px solid #0d5530;color:#d5ffe2;padding:10px;font:11px/1.5 var(--mono);resize:vertical}.actions{display:flex;gap:7px;margin-top:7px}.actions select,.actions button{background:#07170d;border:1px solid #13623a;color:#caffd8;padding:8px;font:700 10px var(--mono)}.actions button{background:#0b4022;border-color:#1cca66;cursor:pointer}.out{white-space:pre-wrap;max-height:155px;overflow:auto;margin-top:8px;padding:8px;background:#020805;border:1px solid #0a4528;color:#8fc7a2;font:10px/1.5 var(--mono)}
+.note{padding:10px;color:#679579;font:10px/1.5 var(--mono)}.note strong{color:#bff5ce}
+@media(max-width:1150px){.shell{grid-template-columns:220px minmax(0,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.top{position:relative}.shell{grid-template-columns:1fr}.left,.right{display:grid;grid-template-columns:1fr 1fr}.center{grid-row:1}.map{min-height:520px}.bottomgrid{grid-template-columns:1fr}.right{grid-column:auto}.node{min-width:92px;font-size:9px}.node.core{min-width:120px}.spacer{display:none}}
+@media(max-width:520px){.left,.right{grid-template-columns:1fr}.shell{padding:6px}.map{min-height:470px}.topnav{display:none}.node{min-width:78px;padding:6px;font-size:8px}.node small{font-size:7px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">LMC // NEURAL OPS</div>
+  <nav class="topnav"><a href="index.html">Hub</a><a href="command.html">Board</a><a href="jev.html">Router</a><a href="system-layout.html">System</a></nav>
+  <div class="spacer"></div>
+  <div class="live"><span class="dot warn" id="bridgeDot"></span><span id="bridgeLabel">LOCAL RUNTIME CHECK</span></div>
+</header>
+<main class="shell">
+<section class="left">
+  <div class="panel"><div class="ph">System Matrix <span class="sub">public + local</span></div><div class="stack">
+    <div class="stat"><b>JARVIS</b><span id="jarvisState">HOLD</span><small>Portable core / requests held during Spark-local transition</small></div>
+    <div class="stat"><b>JEV</b><span>V2</span><small>Decision + routing layer / live acceptance pending</small></div>
+    <div class="stat"><b>SPARK</b><span>GB10</span><small>~121 GB unified memory / one GPU job at a time</small></div>
+    <div class="stat"><b>LEO</b><span>ONLINE*</span><small>Private workspace authority (*documented, not live ping)</small></div>
+  </div></div>
+  <div class="panel"><div class="ph">Active Projects</div><div class="stack" id="projects">
+    <div class="item"><div class="t">BLACKLAND DIGITAL TWIN</div><div class="m">Blocked · Vantage viewport acceptance</div><div class="bar"><i style="width:63%"></i></div></div>
+    <div class="item"><div class="t">PASSENGERS H3</div><div class="m">Completion unverified · inspect existing render</div><div class="bar"><i style="width:78%"></i></div></div>
+    <div class="item"><div class="t">JEV V2 SLICE 1</div><div class="m">Development · live acceptance pending</div><div class="bar"><i style="width:86%"></i></div></div>
+    <div class="item"><div class="t">LMC PLATFORM</div><div class="m">Development gate · client-data isolation pending</div><div class="bar"><i style="width:71%"></i></div></div>
+  </div></div>
+</section>
+
+<section class="center">
+  <div class="panel map" id="map">
+    <div class="ph" style="position:absolute;inset:0 0 auto 0;z-index:3">Autonomous System Topology <span class="sub">click nodes for detail</span></div>
+    <div class="pulse"></div>
+    <svg viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
+      <line class="edge hot" x1="500" y1="325" x2="500" y2="125"/><line class="edge hot" x1="500" y1="325" x2="760" y2="220"/>
+      <line class="edge cyan" x1="500" y1="325" x2="790" y2="420"/><line class="edge violet" x1="500" y1="325" x2="500" y2="535"/>
+      <line class="edge" x1="500" y1="325" x2="225" y2="220"/><line class="edge" x1="500" y1="325" x2="205" y2="430"/>
+      <line class="edge cyan" x1="760" y1="220" x2="790" y2="420"/><line class="edge" x1="225" y1="220" x2="205" y2="430"/>
+      <line class="edge violet" x1="500" y1="535" x2="205" y2="430"/><line class="edge violet" x1="500" y1="535" x2="790" y2="420"/>
+    </svg>
+    <div class="node core" style="left:50%;top:50%" data-title="JEV Decision Core" data-detail="Routes work by capability, policy, attention and available local executors.">JEV DECISION CORE<small>route · prioritize · verify</small></div>
+    <div class="node spark" style="left:50%;top:19%" data-title="Spark Local Reasoning" data-detail="Required local inference layer. No cloud fallback under the October 3 policy.">SPARK REASONING<small>Qwen / local models</small></div>
+    <div class="node" style="left:76%;top:34%" data-title="JARVIS Core" data-detail="Portable intent, planning, tool, verification and permission layer. Current requests are held during migration.">JARVIS CORE<small>plan · permissions · receipts</small></div>
+    <div class="node spark" style="left:79%;top:65%" data-title="LMC Platform" data-detail="API, orchestrator, registered workers, project state and audit trail.">LMC PLATFORM<small>api · workers · audit</small></div>
+    <div class="node memory" style="left:50%;top:82%" data-title="Persistent Memory" data-detail="Project entities, decisions, thesaurus and the target LightRAG + Obsidian layer.">MEMORY GRAPH<small>entities · LightRAG · Obsidian</small></div>
+    <div class="node" style="left:23%;top:34%" data-title="LMC Command" data-detail="Public board plus private workspace surfaces. Public GitHub state is curated, not private runtime telemetry.">LMC COMMAND<small>board · project state · UI</small></div>
+    <div class="node" style="left:21%;top:66%" data-title="Creative Executors" data-detail="ComfyUI, Blender, Vantage/V-Ray, FFmpeg and other registered local capabilities.">CREATIVE TOOLS<small>Comfy · Blender · Vantage</small></div>
+    <div class="legend"><b>GREEN</b> decision path · <span style="color:#54e8ff">CYAN</span> compute/platform · <span style="color:#b678ff">VIOLET</span> memory</div>
+  </div>
+
+  <div class="bottomgrid">
+    <div class="panel"><div class="ph">Activity Ledger <span class="sub">public evidence + UI events</span></div><div class="log" id="ledger">
+      <div class="logrow"><time>OCT 03</time><b>SPARK</b><span>Local-only JARVIS transition recorded; cloud fallback disabled.</span></div>
+      <div class="logrow"><time>OCT 03</time><b>PLATFORM</b><span>Five containers documented healthy at last infrastructure verification.</span></div>
+      <div class="logrow"><time>OCT 03</time><b>BLACKLAND</b><span>Viewport capture blocked; browser_ready=false in recorded status.</span></div>
+      <div class="logrow"><time>OCT 02</time><b>JARVIS</b><span>M3 core released; live acceptance scope remains bounded.</span></div>
+    </div></div>
+    <div class="panel"><div class="ph">Node Inspector</div><div class="note" id="inspect"><strong>Select a node.</strong><br>Details appear here. This panel intentionally distinguishes documented state from live telemetry.</div></div>
+  </div>
+</section>
+
+<section class="right">
+  <div class="panel"><div class="ph">Readiness</div><div class="kpi">
+    <div class="k"><strong>6</strong><span>system layers</span></div><div class="k"><strong>1</strong><span>GPU job policy</span></div>
+    <div class="k"><strong>503</strong><span>JARVIS hold</span></div><div class="k"><strong>0</strong><span>cloud fallback</span></div>
+  </div></div>
+
+  <div class="panel"><div class="ph">Command Console <span class="sub">local bridge</span></div><div class="console">
+    <textarea id="prompt" placeholder="Describe a task for the local JEV/JARVIS execution layer..."></textarea>
+    <div class="actions"><select id="agent"><option value="auto">Auto route</option><option value="claude">Legacy Claude path</option><option value="openai">Legacy Codex path</option></select><button id="routeBtn">ROUTE</button></div>
+    <div class="out" id="out">No command sent. The legacy bridge endpoint is probed locally and may be offline during the Spark-only migration.</div>
+  </div></div>
+
+  <div class="panel"><div class="ph">Quick Surfaces</div><div class="quick">
+    <button onclick="location.href='command.html'">Task Board</button><button onclick="location.href='jev.html'">Router</button>
+    <button onclick="location.href='system-layout.html'">System Map</button><button onclick="location.href='index.html'">Knowledge Hub</button>
+  </div></div>
+
+  <div class="panel"><div class="ph">Data Boundary</div><div class="note"><strong>Public repo ≠ live infrastructure.</strong><br>This interface visualizes current documented architecture and can read the local loopback bridge when available. Private labels, secrets and client data are not published to GitHub Pages.</div></div>
+</section>
+</main>
+<script>
+const BASE=localStorage.getItem("lmc_jev_bridge")||"http://127.0.0.1:4317";
+const $=id=>document.getElementById(id);
+document.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>{
+  $("inspect").innerHTML="<strong>"+n.dataset.title+"</strong><br>"+n.dataset.detail;
+}));
+async function health(){
+  try{
+    const r=await fetch(BASE+"/health",{cache:"no-store"}); const j=await r.json();
+    $("bridgeDot").className="dot "+(j.ok?"on":"warn");
+    $("bridgeLabel").textContent=j.ok?"LOCAL BRIDGE ONLINE":"LOCAL BRIDGE UNAVAILABLE";
+  }catch(e){$("bridgeDot").className="dot warn";$("bridgeLabel").textContent="LOCAL BRIDGE OFFLINE";}
+}
+async function route(){
+  const prompt=$("prompt").value.trim(); if(!prompt)return;
+  $("routeBtn").disabled=true;$("out").textContent="Routing through local bridge…";
+  try{
+    const r=await fetch(BASE+"/route",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,agent:$("agent").value})});
+    const j=await r.json(); $("out").textContent=JSON.stringify(j,null,2);
+  }catch(e){$("out").textContent="Local bridge unavailable. This is expected while the Spark-only JARVIS transition is holding requests. "+e.message}
+  finally{$("routeBtn").disabled=false}
+}
+$("routeBtn").onclick=route; health(); setInterval(health,15000);
+fetch("data/knowledge.json?ts="+Date.now()).then(r=>r.json()).then(j=>{
+  if(!j.entries||!j.entries.length)return;
+  const latest=j.entries.slice(-4).reverse();
+  $("ledger").innerHTML=latest.map(e=>'<div class="logrow"><time>'+String(e.date||"").slice(5)+'</time><b>'+String(e.tag||"NOTE").toUpperCase().slice(0,12)+'</b><span>'+String(e.title||e.body||"").replace(/[<>]/g,"")+'</span></div>').join("");
+}).catch(()=>{});
+</script>
+</body></html>
