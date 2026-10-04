@@ -74,7 +74,7 @@ They distinguish releases, development work and acceptance gates; they are not l
 - **JEV:** studio-wide decision/routing layer. **house-agent** is the approved name for the Blackland role; older files still use JEV.
 - **Blackland:** Vantage interactive viewport and V-Ray finals direction, Unreal/FBX fallback retained. Tour acceptance is blocked; prior POC evidence does not establish readiness.
 
-The earlier Ryzen/Mac purchasing material is historical proposal content, not the installed inventory or a verified cost-saving result. Cloud reasoning and burst services remain explicitly selected resources.
+The earlier Ryzen/Mac purchasing material is historical proposal content, not the installed inventory or a verified cost-saving result. JARVIS reasoning is Spark-only with no cloud fallback. Earlier cloud-routing descriptions are historical and do not authorize fallback.
 
 This public repository contains curated summaries. Private deployment documents remain outside it. Public board inputs may feed JEV, but its private labels and alerts are not written back here.
 
@@ -86,3 +86,7 @@ never in source · no destructive deletes of data or knowledge stores.
 ---
 
 Built by Work Official LLC.
+
+## Experimental Neural Operations integration
+
+`ops.html` is a disconnected public preview. Private telemetry requires the separate, disabled-by-default adapter. No current service or deployment is replaced. See [compatibility report and rollback](docs/NEURAL_OPS_INTEGRATION.md). Public preview deployment is owner-approved. Private client access remains gated on HTTPS hosting and live account validation.

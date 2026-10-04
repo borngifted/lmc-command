@@ -27,110 +27,14 @@ svg{position:absolute;inset:0;width:100%;height:100%}.edge{stroke:#127440;stroke
 @media(max-width:1150px){.shell{grid-template-columns:220px minmax(0,1fr)}.right{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.top{position:relative}.shell{grid-template-columns:1fr}.left,.right{display:grid;grid-template-columns:1fr 1fr}.center{grid-row:1}.map{min-height:520px}.bottomgrid{grid-template-columns:1fr}.right{grid-column:auto}.node{min-width:92px;font-size:9px}.node.core{min-width:120px}.spacer{display:none}}
 @media(max-width:520px){.left,.right{grid-template-columns:1fr}.shell{padding:6px}.map{min-height:470px}.topnav{display:none}.node{min-width:78px;padding:6px;font-size:8px}.node small{font-size:7px}}
+
+.top{flex-wrap:wrap}.topnav{display:flex!important}.note,.item .m,.stat small,.sub{color:#a3cbb1;font-size:12px}.ph{font-size:12px}.topnav a{font-size:12px}.map{min-height:440px}.node{font-size:12px;cursor:default}.edge.hot,.pulse{animation:none}.console input{width:100%;padding:12px;background:#020905;color:var(--ink);border:1px solid var(--line)}button{min-height:44px}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:3px}.item{overflow-wrap:anywhere}.legend{font-size:12px;right:10px}.logrow{display:block;font-size:12px}.map .node{min-width:0;width:38%;}.center{grid-template-rows:auto auto}[hidden]{display:none!important}@media(max-width:520px){.brand{font-size:12px}.map{min-height:440px}.node{font-size:11px!important;padding:12px!important}.topnav a{padding:10px}.live{width:100%}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
-<header class="top">
-  <div class="brand">LMC // NEURAL OPS</div>
-  <nav class="topnav"><a href="index.html">Hub</a><a href="command.html">Board</a><a href="jev.html">Router</a><a href="system-layout.html">System</a></nav>
-  <div class="spacer"></div>
-  <div class="live"><span class="dot warn" id="bridgeDot"></span><span id="bridgeLabel">LOCAL RUNTIME CHECK</span></div>
-</header>
+<body data-private="false">
+<header class="top"><div class="brand">LMC // NEURAL OPS</div><nav class="topnav" aria-label="Existing surfaces"><a href="index.html">Hub</a><a href="command.html">Task Board / Idea Inbox</a><a href="system-layout.html">Architecture</a></nav><div class="spacer"></div><div class="live" id="status" role="status">PUBLIC PREVIEW · NOT CONNECTED</div></header>
 <main class="shell">
-<section class="left">
-  <div class="panel"><div class="ph">System Matrix <span class="sub">public + local</span></div><div class="stack">
-    <div class="stat"><b>JARVIS</b><span id="jarvisState">HOLD</span><small>Portable core / requests held during Spark-local transition</small></div>
-    <div class="stat"><b>JEV</b><span>V2</span><small>Decision + routing layer / live acceptance pending</small></div>
-    <div class="stat"><b>SPARK</b><span>GB10</span><small>~121 GB unified memory / one GPU job at a time</small></div>
-    <div class="stat"><b>LEO</b><span>ONLINE*</span><small>Private workspace authority (*documented, not live ping)</small></div>
-  </div></div>
-  <div class="panel"><div class="ph">Active Projects</div><div class="stack" id="projects">
-    <div class="item"><div class="t">BLACKLAND DIGITAL TWIN</div><div class="m">Blocked · Vantage viewport acceptance</div><div class="bar"><i style="width:63%"></i></div></div>
-    <div class="item"><div class="t">PASSENGERS H3</div><div class="m">Completion unverified · inspect existing render</div><div class="bar"><i style="width:78%"></i></div></div>
-    <div class="item"><div class="t">JEV V2 SLICE 1</div><div class="m">Development · live acceptance pending</div><div class="bar"><i style="width:86%"></i></div></div>
-    <div class="item"><div class="t">LMC PLATFORM</div><div class="m">Development gate · client-data isolation pending</div><div class="bar"><i style="width:71%"></i></div></div>
-  </div></div>
-</section>
-
-<section class="center">
-  <div class="panel map" id="map">
-    <div class="ph" style="position:absolute;inset:0 0 auto 0;z-index:3">Autonomous System Topology <span class="sub">click nodes for detail</span></div>
-    <div class="pulse"></div>
-    <svg viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
-      <line class="edge hot" x1="500" y1="325" x2="500" y2="125"/><line class="edge hot" x1="500" y1="325" x2="760" y2="220"/>
-      <line class="edge cyan" x1="500" y1="325" x2="790" y2="420"/><line class="edge violet" x1="500" y1="325" x2="500" y2="535"/>
-      <line class="edge" x1="500" y1="325" x2="225" y2="220"/><line class="edge" x1="500" y1="325" x2="205" y2="430"/>
-      <line class="edge cyan" x1="760" y1="220" x2="790" y2="420"/><line class="edge" x1="225" y1="220" x2="205" y2="430"/>
-      <line class="edge violet" x1="500" y1="535" x2="205" y2="430"/><line class="edge violet" x1="500" y1="535" x2="790" y2="420"/>
-    </svg>
-    <div class="node core" style="left:50%;top:50%" data-title="JEV Decision Core" data-detail="Routes work by capability, policy, attention and available local executors.">JEV DECISION CORE<small>route · prioritize · verify</small></div>
-    <div class="node spark" style="left:50%;top:19%" data-title="Spark Local Reasoning" data-detail="Required local inference layer. No cloud fallback under the October 3 policy.">SPARK REASONING<small>Qwen / local models</small></div>
-    <div class="node" style="left:76%;top:34%" data-title="JARVIS Core" data-detail="Portable intent, planning, tool, verification and permission layer. Current requests are held during migration.">JARVIS CORE<small>plan · permissions · receipts</small></div>
-    <div class="node spark" style="left:79%;top:65%" data-title="LMC Platform" data-detail="API, orchestrator, registered workers, project state and audit trail.">LMC PLATFORM<small>api · workers · audit</small></div>
-    <div class="node memory" style="left:50%;top:82%" data-title="Persistent Memory" data-detail="Project entities, decisions, thesaurus and the target LightRAG + Obsidian layer.">MEMORY GRAPH<small>entities · LightRAG · Obsidian</small></div>
-    <div class="node" style="left:23%;top:34%" data-title="LMC Command" data-detail="Public board plus private workspace surfaces. Public GitHub state is curated, not private runtime telemetry.">LMC COMMAND<small>board · project state · UI</small></div>
-    <div class="node" style="left:21%;top:66%" data-title="Creative Executors" data-detail="ComfyUI, Blender, Vantage/V-Ray, FFmpeg and other registered local capabilities.">CREATIVE TOOLS<small>Comfy · Blender · Vantage</small></div>
-    <div class="legend"><b>GREEN</b> decision path · <span style="color:#54e8ff">CYAN</span> compute/platform · <span style="color:#b678ff">VIOLET</span> memory</div>
-  </div>
-
-  <div class="bottomgrid">
-    <div class="panel"><div class="ph">Activity Ledger <span class="sub">public evidence + UI events</span></div><div class="log" id="ledger">
-      <div class="logrow"><time>OCT 03</time><b>SPARK</b><span>Local-only JARVIS transition recorded; cloud fallback disabled.</span></div>
-      <div class="logrow"><time>OCT 03</time><b>PLATFORM</b><span>Five containers documented healthy at last infrastructure verification.</span></div>
-      <div class="logrow"><time>OCT 03</time><b>BLACKLAND</b><span>Viewport capture blocked; browser_ready=false in recorded status.</span></div>
-      <div class="logrow"><time>OCT 02</time><b>JARVIS</b><span>M3 core released; live acceptance scope remains bounded.</span></div>
-    </div></div>
-    <div class="panel"><div class="ph">Node Inspector</div><div class="note" id="inspect"><strong>Select a node.</strong><br>Details appear here. This panel intentionally distinguishes documented state from live telemetry.</div></div>
-  </div>
-</section>
-
-<section class="right">
-  <div class="panel"><div class="ph">Readiness</div><div class="kpi">
-    <div class="k"><strong>6</strong><span>system layers</span></div><div class="k"><strong>1</strong><span>GPU job policy</span></div>
-    <div class="k"><strong>503</strong><span>JARVIS hold</span></div><div class="k"><strong>0</strong><span>cloud fallback</span></div>
-  </div></div>
-
-  <div class="panel"><div class="ph">Command Console <span class="sub">local bridge</span></div><div class="console">
-    <textarea id="prompt" placeholder="Describe a task for the local JEV/JARVIS execution layer..."></textarea>
-    <div class="actions"><select id="agent"><option value="auto">Auto route</option><option value="claude">Legacy Claude path</option><option value="openai">Legacy Codex path</option></select><button id="routeBtn">ROUTE</button></div>
-    <div class="out" id="out">No command sent. The legacy bridge endpoint is probed locally and may be offline during the Spark-only migration.</div>
-  </div></div>
-
-  <div class="panel"><div class="ph">Quick Surfaces</div><div class="quick">
-    <button onclick="location.href='command.html'">Task Board</button><button onclick="location.href='jev.html'">Router</button>
-    <button onclick="location.href='system-layout.html'">System Map</button><button onclick="location.href='index.html'">Knowledge Hub</button>
-  </div></div>
-
-  <div class="panel"><div class="ph">Data Boundary</div><div class="note"><strong>Public repo ≠ live infrastructure.</strong><br>This interface visualizes current documented architecture and can read the local loopback bridge when available. Private labels, secrets and client data are not published to GitHub Pages.</div></div>
-</section>
-</main>
-<script>
-const BASE=localStorage.getItem("lmc_jev_bridge")||"http://127.0.0.1:4317";
-const $=id=>document.getElementById(id);
-document.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>{
-  $("inspect").innerHTML="<strong>"+n.dataset.title+"</strong><br>"+n.dataset.detail;
-}));
-async function health(){
-  try{
-    const r=await fetch(BASE+"/health",{cache:"no-store"}); const j=await r.json();
-    $("bridgeDot").className="dot "+(j.ok?"on":"warn");
-    $("bridgeLabel").textContent=j.ok?"LOCAL BRIDGE ONLINE":"LOCAL BRIDGE UNAVAILABLE";
-  }catch(e){$("bridgeDot").className="dot warn";$("bridgeLabel").textContent="LOCAL BRIDGE OFFLINE";}
-}
-async function route(){
-  const prompt=$("prompt").value.trim(); if(!prompt)return;
-  $("routeBtn").disabled=true;$("out").textContent="Routing through local bridge…";
-  try{
-    const r=await fetch(BASE+"/route",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt,agent:$("agent").value})});
-    const j=await r.json(); $("out").textContent=JSON.stringify(j,null,2);
-  }catch(e){$("out").textContent="Local bridge unavailable. This is expected while the Spark-only JARVIS transition is holding requests. "+e.message}
-  finally{$("routeBtn").disabled=false}
-}
-$("routeBtn").onclick=route; health(); setInterval(health,15000);
-fetch("data/knowledge.json?ts="+Date.now()).then(r=>r.json()).then(j=>{
-  if(!j.entries||!j.entries.length)return;
-  const latest=j.entries.slice(-4).reverse();
-  $("ledger").innerHTML=latest.map(e=>'<div class="logrow"><time>'+String(e.date||"").slice(5)+'</time><b>'+String(e.tag||"NOTE").toUpperCase().slice(0,12)+'</b><span>'+String(e.title||e.body||"").replace(/[<>]/g,"")+'</span></div>').join("");
-}).catch(()=>{});
-</script>
-</body></html>
+<section class="left"><div class="panel"><div class="ph">Access boundary</div><div class="note" id="boundary">Experimental, read-only interface. This public preview makes no private network requests and contains no project telemetry.</div></div><div class="panel"><div class="ph">Projects</div><div class="stack" id="projects"><p class="note">No authenticated project data loaded.</p></div></div></section>
+<section class="center"><div class="panel map"><div class="ph">Interface structure <span class="sub">conceptual · not live topology</span></div><svg viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true"><line class="edge" x1="300" y1="220" x2="700" y2="220"/><line class="edge" x1="300" y1="220" x2="300" y2="430"/><line class="edge" x1="700" y1="220" x2="700" y2="430"/></svg><div class="node" style="left:28%;top:34%">PROJECTS</div><div class="node" style="left:72%;top:34%">PERMISSIONS</div><div class="node" style="left:28%;top:66%">RECORDED JOBS</div><div class="node" style="left:72%;top:66%">READ-ONLY VIEW</div><div class="legend">Lines illustrate interface relationships. They do not represent running jobs or service health.</div></div><div class="panel"><div class="ph">Recorded job state <span class="sub">historical records</span></div><div id="jobs" class="stack"><p class="note">No records loaded.</p></div></div></section>
+<section class="right"><div class="panel"><div class="ph">Session</div><form id="login" class="console" hidden><label for="token">Existing platform access token</label><input id="token" type="password" autocomplete="off" required><div class="actions"><button type="submit">Connect</button><button type="button" id="logout">Sign out</button></div><p class="note">Use an existing authorized session. Tokens stay in gateway memory for at most 15 minutes; never stored in browser storage.</p></form><div class="note" id="sessionNote">Private access is disabled on this public surface.</div></div><div class="panel"><div class="ph">Execution policy</div><div class="note">Execution is disabled for every role in this experiment. Existing task submission, routing and audit systems remain unchanged. JARVIS reasoning remains Spark-only with no cloud fallback.</div></div><div class="panel" id="workersPanel" hidden><div class="ph">Developer · registered capabilities</div><div class="stack" id="workers"></div><p class="note">Registration is not proof of model readiness. Heartbeat times are shown without inferring health.</p></div><div class="panel"><div class="ph">Evidence freshness</div><p class="note" id="freshness">No live observation. No simulated metrics are presented as live.</p></div></section>
+</main><script src="ops.js" defer></script></body></html>
