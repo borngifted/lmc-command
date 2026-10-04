@@ -1,0 +1,19 @@
+{
+  "source": "simulated",
+  "checkedAt": "2026-10-04T04:18:05.348Z",
+  "passed": 12,
+  "checks": [
+    "default off returns 404",
+    "anonymous state denied",
+    "forged role header denied",
+    "cross-origin sign-in denied",
+    "UI blocks self approval",
+    "desktop no horizontal overflow",
+    "UI rollback completed",
+    "client proposal and review controls hidden",
+    "client evidence hidden",
+    "mobile no overflow",
+    "no external network calls",
+    "no browser errors"
+  ]
+}

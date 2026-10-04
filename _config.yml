@@ -1,5 +1,6 @@
 # Private adapter and test evidence must never be part of the Pages artifact.
 exclude:
+  - skill-forge
   - private-ops
   - tests
   - docs/neural-ops-evidence
