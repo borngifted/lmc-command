@@ -1,0 +1,28 @@
+{
+  "testedAt": "2026-10-04T03:34:15.130Z",
+  "source": "simulated fixture; no production connection",
+  "checks": [
+    "feature flag defaults off",
+    "anonymous denied",
+    "cross origin session rejected",
+    "client cookie HttpOnly",
+    "client membership projection",
+    "sensitive fields stripped",
+    "client never queries workers",
+    "developer cookie HttpOnly",
+    "developer capabilities visible",
+    "execution rejected even for admin",
+    "revocation takes effect next request",
+    "upstream failure closed",
+    "only read upstream calls",
+    "developer no horizontal overflow",
+    "developer no browser errors",
+    "developer logout clears projects",
+    "client no horizontal overflow",
+    "client no browser errors",
+    "client UI hides developer inventory",
+    "client logout clears projects",
+    "public artifact does not probe private APIs"
+  ],
+  "passed": 21
+}

@@ -1,0 +1,5 @@
+# Private adapter and test evidence must never be part of the Pages artifact.
+exclude:
+  - private-ops
+  - tests
+  - docs/neural-ops-evidence
